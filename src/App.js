@@ -3,6 +3,9 @@ import './App.css';
 import Home from './pages/home/Home';
 import List from './pages/list/List';
 import Hotel from './pages/hotel/Hotel';
+import LoginPage from './pages/auth/LoginPage';
+import './index.css';
+import RegisterPage from './pages/auth/RegisterPage';
 
 function App() {
   return (
@@ -11,6 +14,8 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/hotels' element={<List />} />
         <Route path='/hotels/:id' element={<Hotel />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/register' element={<RegisterPage />} />
       </Routes>
     </BrowserRouter>
   );

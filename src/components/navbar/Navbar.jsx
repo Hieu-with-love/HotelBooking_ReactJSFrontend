@@ -3,7 +3,7 @@ import "./navbar.css"
 
 const Navbar = () => {
     return (
-        <div className='navbar'>
+        <div className='myNavbar'>
             <div className="navContainer">
                 <span className="logo">
                     ZotelStay
