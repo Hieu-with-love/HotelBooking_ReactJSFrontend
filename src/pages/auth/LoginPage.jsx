@@ -3,6 +3,7 @@ import { Col, Container, Row } from 'react-bootstrap'
 import { FaGoogle, FaApple, FaFacebook } from "react-icons/fa";
 import './login.css'
 import { useNavigate } from 'react-router-dom';
+import imgBackground from '../../assets/images/zotel-background.png'
 
 
 const LoginPage = () => {
@@ -41,7 +42,12 @@ const LoginPage = () => {
                         <Col md={6}>
                             <div className='zotel-section'>
                                 <div className='logo'>
-                                    <h5>ZotelStay</h5>
+                                    {/* <h5>ZotelStay</h5> */}
+                                    <img src={imgBackground}
+                                        alt="logo"
+                                        className='img-fluid zotel-logo'
+                                        onClick={() => navigate('/')}
+                                    />
                                     <button className="navigate-register"
                                         onClick={() => navigate('/register')}
                                     >
