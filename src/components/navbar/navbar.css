@@ -1,27 +1,73 @@
-.myNavbar{
-    height: 50px;
-    background-color: #003b95;
+.nav-section {
     display: flex;
     justify-content: center;
+    padding: 0 20px;
+    height: 60px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: var(--fontFamily);
 }
 
-.navContainer{
+.nav-section .nav-container {
     width: 100%;
     max-width: 1024px;
-    color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 5px 0;
 }
 
-.logo{
-    font-weight: 500;
+.nav-section .nav-container .nav-logo h5 {
+    font-size: 28px;
+    font-weight: bold;
 }
 
-.navButton{
-    margin-left: 20px;
-    border: none;
-    padding: 5px 10px;
+.nav-section .nav-container .nav-features {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+.nav-section .nav-container .nav-features .feature-item {
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
     cursor: pointer;
-    color:#003b95;
+}
+
+.nav-section .nav-container .nav-features .feature-item span {
+    margin-left: 5px;
+    font-size: 16px;
+    font-size: 200;
+}
+
+.nav-section .nav-container .nav-features .feature-item i {
+    font-size: 20px;
+}
+
+.nav-section .nav-container .nav-features .menu-item {
+    cursor: pointer;
+    transform: none;
+    position: relative;
+}
+
+.nav-section .nav-container .nav-features .menu-item:hover {
+    border: 1px solid gray;
+}
+
+.nav-section .nav-container .nav-features .menu-item .menu-dropdown {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 200px;
+    z-index: 10;
+    padding: 10px;
+    border: 2px solid black;
+    background-color: #fff;
+}
+
+.nav-section .nav-container .nav-features .menu-item .menu-dropdown .dropdown-item {
+    padding: 5px 0;
+    cursor: pointer;
+    line-height: 25px;
 }
