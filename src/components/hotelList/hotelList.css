@@ -1,0 +1,122 @@
+.hotel-list-container {
+  padding: 20px 0;
+}
+
+.section-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.section-title:after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #0071c2;
+}
+
+.hotel-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  border-radius: 8px;
+  border: none;
+}
+
+.hotel-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.hotel-img-container {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
+}
+
+.hotel-image {
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.hotel-card:hover .hotel-image {
+  transform: scale(1.05);
+}
+
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 14px;
+  padding: 5px 10px;
+}
+
+.hotel-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0071c2;
+  margin-bottom: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.rating {
+  background-color: #003580;
+  color: white;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.star-icon {
+  color: #febb02;
+  margin-right: 5px;
+}
+
+.location-icon, .amenity-icon {
+  color: #0071c2;
+}
+
+.hotel-description {
+  color: #666;
+  margin-top: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  font-size: 14px;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 14px;
+  display: block;
+}
+
+.current-price {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0071c2;
+}
+
+.view-details-btn {
+  background-color: #0071c2;
+  border-color: #0071c2;
+  padding: 5px 15px;
+}
+
+.view-details-btn:hover {
+  background-color: #005fa3;
+  border-color: #005fa3;
+}
