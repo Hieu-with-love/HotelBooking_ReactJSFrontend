@@ -6,7 +6,7 @@ const API_URL = 'http://localhost:8088/api/partner/hotels';
 // Get all hotels with pagination
 export const getHotels = async (page = 0, size = 10) => {
     try {
-        const response = await api.get(`/hotels?page=${page}&size=${size}`);
+        const response = await api.get(`/api/hotels?page=${page}&size=${size}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching hotels:', error);
@@ -17,7 +17,7 @@ export const getHotels = async (page = 0, size = 10) => {
 // Get hotel by ID
 export const getHotelById = async (id) => {
     try {
-        const response = await api.get(`/hotels/${id}`);
+        const response = await api.get(`/api/hotels/${id}`);
         return response.data;
     } catch (error) {
         console.error(`Error fetching hotel with id ${id}:`, error);
@@ -39,7 +39,7 @@ export const getFeaturedHotels = async (limit = 6) => {
 // Search hotels
 export const searchHotels = async (params) => {
     try {
-        const response = await api.get('/hotels/search', { params });
+        const response = await api.get('/api/hotels/search', { params });
         return response.data;
     } catch (error) {
         console.error('Error searching hotels:', error);
@@ -104,7 +104,7 @@ export const deleteHotel = async (hotelId) => {
 //
 export const getHotelsFromCustomer = async (page, size) => {
     try {
-        const response = await api.get(`/customer/hotels?page=${page}&size=${size}`);
+        const response = await api.get(`/api/customer/hotels?page=${page}&size=${size}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching hotels:', error);
@@ -115,7 +115,7 @@ export const getHotelsFromCustomer = async (page, size) => {
 // Get popular hotels in the customer side
 export const getPopularHotels = async () => {
     try{
-        const response = await api.get('/customer/hotels/popular');
+        const response = await api.get('/api/customer/hotels/popular');
         return response.data;
     }catch (error) {
         return error.response ? error.response.data : error.message;
@@ -125,7 +125,7 @@ export const getPopularHotels = async () => {
 // Get hotel details from the customer side
 export const getHotelDetails = async (hotelId) => {
     try{
-        const reponse = await api.get(`/customer/hotels/${hotelId}`);
+        const reponse = await api.get(`/api/customer/hotels/${hotelId}`);
         return reponse.data;   
     }catch (error) {
         return error.response ? error.response.data : error.message;
@@ -135,7 +135,7 @@ export const getHotelDetails = async (hotelId) => {
 // Get hotel details from the customer side
 export const getHotelDetailsById = async (hotelId) => {
     try{
-        const response = await api.get(`/customer/hotels/${hotelId}`);
+        const response = await api.get(`/api/customer/hotels/${hotelId}`);
         return response.data;
     }catch (error) {
         return error.response ? error.response.data : error.message;
@@ -145,7 +145,7 @@ export const getHotelDetailsById = async (hotelId) => {
 // api form search hotel by some criteria
 export const searchRoomsByCriteria = async (criteria) => {
     try{
-        const response = await api.get('/customer/hotels/search-rooms', criteria);
+        const response = await api.get('/api/customer/hotels/search-rooms', criteria);
         return response.data;
     }catch (error) {
         return error.response ? error.response.data : error.message;
