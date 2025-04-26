@@ -223,7 +223,11 @@ const HotelList = () => {
 
                                     <Card.Body>
                                         <div className="d-flex justify-content-between align-items-start mb-2">
-                                            <Card.Title className="hotel-title">{getSafeValue(hotel.name, "Khách sạn")}</Card.Title>
+                                            <Card.Title className="hotel-title">
+                                                <Link to={`/hotels/${hotel.id}`} className="text-decoration-none text-dark">
+                                                    {getSafeValue(hotel.name, "Không có tên khách sạn")}
+                                                </Link>
+                                            </Card.Title>
                                             <div className="rating">
                                                 <FontAwesomeIcon icon={faStar} className="star-icon" />
                                                 <span>{getSafeValue(hotel.rating, "4.5")}</span>

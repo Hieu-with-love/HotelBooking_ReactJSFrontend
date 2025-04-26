@@ -1,0 +1,305 @@
+/* Hotel Details Page Styles */
+
+/* Breadcrumb */
+.breadcrumb-top {
+    font-size: 14px;
+    color: #666;
+}
+
+.breadcrumb-item {
+    cursor: pointer;
+}
+
+.breadcrumb-item:hover {
+    color: #007cc2;
+}
+
+.breadcrumb-item.active {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Hotel Header */
+.hotel-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.hotel-location {
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+/* Hotel Images */
+.hotel-images {
+    margin-bottom: 30px;
+}
+
+.main-image img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+.thumbnail {
+    height: 120px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.thumbnail:hover {
+    opacity: 0.8;
+}
+
+.more-images-overlay {
+    position: relative;
+    height: 120px;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.more-images-count {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Navigation Tabs */
+.hotel-navigation {
+    margin-bottom: 20px;
+}
+
+.hotel-navigation .nav-item {
+    margin-right: 5px;
+}
+
+.hotel-navigation .nav-link {
+    padding: 10px 20px;
+    font-weight: 500;
+    color: #555;
+    border: none;
+    border-bottom: 3px solid transparent;
+}
+
+.hotel-navigation .nav-link.active {
+    color: #007cc2;
+    background-color: transparent;
+    border-bottom: 3px solid #007cc2;
+}
+
+/* Room Card */
+.room-card {
+    transition: box-shadow 0.3s, transform 0.2s;
+    overflow: hidden;
+}
+
+.room-card:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+.room-card.selected {
+    border: 2px solid #28a745;
+}
+
+.room-img-container {
+    height: 100%;
+    overflow: hidden;
+}
+
+.room-img-container img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.room-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.price-label {
+    font-size: 12px;
+    color: #666;
+}
+
+.price-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #007cc2;
+}
+
+.room-description {
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.room-features {
+    margin-bottom: 15px;
+}
+
+/* Amenities */
+.amenity-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.amenity-item i {
+    font-size: 18px;
+    color: #007cc2;
+    margin-right: 10px;
+    width: 24px;
+    text-align: center;
+}
+
+/* Reviews */
+.review-summary {
+    margin-bottom: 30px;
+}
+
+.rating-score {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+.rating-stars {
+    font-size: 18px;
+}
+
+.review-item {
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+}
+
+.reviewer-info h5 {
+    margin-bottom: 5px;
+}
+
+.hotel-response {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.rating-input {
+    font-size: 24px;
+}
+
+.rating-star {
+    cursor: pointer;
+}
+
+.rating-star:hover {
+    color: #ffc107 !important;
+}
+
+/* Booking Summary */
+.booking-summary {
+    border: none;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.selected-room-item {
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.room-name {
+    font-weight: 500;
+}
+
+.total-price {
+    font-size: 18px;
+}
+
+/* Policy Items */
+.policy-item {
+    display: flex;
+    align-items: flex-start;
+}
+
+.policy-item i {
+    margin-right: 10px;
+    margin-top: 3px;
+    font-size: 18px;
+    color: #007cc2;
+}
+
+/* Location Placeholder */
+.location-placeholder {
+    height: 300px;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+}
+
+.map-placeholder {
+    width: 100%;
+}
+
+/* Social Links */
+.social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #f8f9fa;
+    border-radius: 50%;
+    color: #007cc2;
+    font-size: 20px;
+    transition: all 0.3s;
+}
+
+.social-link:hover {
+    background-color: #007cc2;
+    color: white;
+}
+
+/* Related Hotels */
+.related-hotels {
+    padding: 30px 0;
+    background-color: #f8f9fa;
+    margin-top: 60px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .main-image img {
+        height: 250px;
+    }
+    
+    .thumbnail {
+        height: 80px;
+    }
+    
+    .more-images-overlay {
+        height: 80px;
+    }
+}
