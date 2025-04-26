@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://hotelbookingspringbackend-production.up.railway.app";
+const API_URL = "https://hotelbooking-springbackend.onrender.com";
 
 export const api = axios.create({
     baseURL: API_URL,
