@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Container, Row, Col, Card, Badge, Button, Form, ListGroup, Tab, Nav, Alert, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faMapMarkerAlt, faWifi, faBed, faUser, faCalendarDays, faDollarSign, faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -832,7 +832,7 @@ const RoomCard = ({ room, onSelect, isSelected, getImageUrl, existsFreeWifi }) =
                                 </Button>
                             </div>
                             <div className="room-details-link">
-                                <a href="#" className="text-decoration-none">Chi tiết phòng</a>
+                                <Link to={`/hotels/rooms/${room.id}`} className="text-decoration-none">Chi tiết phòng</Link>
                             </div>
                         </div>
                     </Card.Body>

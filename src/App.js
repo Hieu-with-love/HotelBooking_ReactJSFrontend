@@ -6,6 +6,7 @@ import LoginPage from './pages/auth/LoginPage';
 import './index.css';
 import RegisterPage from './pages/auth/RegisterPage';
 import HotelDetails from './pages/hotel/HotelDetails';
+import RoomDetails from './pages/room/RoomDetails';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       {/* Start customer route */}
       <Route path='/hotels' element={<List />} />
       <Route path='/hotels/:id' element={<HotelDetails />} />
+      <Route path='/hotels/rooms/:id' element={<RoomDetails />} />
       {/* End customer route */}
 
       </Routes>

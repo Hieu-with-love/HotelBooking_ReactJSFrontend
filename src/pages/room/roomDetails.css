@@ -1,0 +1,261 @@
+/* Room Details Page Styles */
+
+/* Breadcrumb */
+.breadcrumb-top {
+    font-size: 14px;
+    color: #666;
+}
+
+.breadcrumb-item {
+    cursor: pointer;
+}
+
+.breadcrumb-item:hover {
+    color: #007cc2;
+}
+
+.breadcrumb-item.active {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Room Header */
+.room-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.hotel-name {
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+/* Room Images */
+.room-images {
+    margin-bottom: 30px;
+}
+
+.main-image img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+.thumbnail {
+    height: 120px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.thumbnail:hover {
+    opacity: 0.8;
+}
+
+.more-images-overlay {
+    position: relative;
+    height: 120px;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.more-images-count {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Navigation Tabs */
+.room-navigation {
+    margin-bottom: 20px;
+}
+
+.room-navigation .nav-item {
+    margin-right: 5px;
+}
+
+.room-navigation .nav-link {
+    padding: 10px 20px;
+    font-weight: 500;
+    color: #555;
+    border: none;
+    border-bottom: 3px solid transparent;
+}
+
+.room-navigation .nav-link.active {
+    color: #007cc2;
+    background-color: transparent;
+    border-bottom: 3px solid #007cc2;
+}
+
+/* Room Specifications */
+.room-specs .list-group-item {
+    border-left: none;
+    border-right: none;
+    padding: 15px 0;
+}
+
+.spec-label {
+    color: #666;
+    font-size: 14px;
+}
+
+.spec-value {
+    font-weight: 500;
+    color: #333;
+}
+
+/* Room Price */
+.price-value {
+    color: #007cc2;
+    font-weight: 700;
+}
+
+/* Amenities */
+.amenity-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.amenity-item i, .amenity-item svg {
+    font-size: 18px;
+    color: #007cc2;
+    margin-right: 10px;
+    width: 24px;
+    text-align: center;
+}
+
+/* Policy Items */
+.policy-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 0;
+}
+
+.policy-item i, .policy-item svg {
+    margin-right: 10px;
+    font-size: 18px;
+    color: #007cc2;
+    min-width: 24px;
+    text-align: center;
+}
+
+.policy-label {
+    font-weight: 500;
+    color: #333;
+}
+
+.policy-value {
+    color: #666;
+    font-size: 14px;
+    margin-top: 3px;
+}
+
+/* Reviews */
+.review-summary {
+    margin-bottom: 30px;
+}
+
+.rating-score {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+.rating-stars {
+    font-size: 18px;
+}
+
+.review-item {
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+}
+
+.reviewer-info h5 {
+    margin-bottom: 5px;
+}
+
+.hotel-response {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.rating-input {
+    font-size: 24px;
+}
+
+.rating-star {
+    cursor: pointer;
+}
+
+.rating-star:hover {
+    color: #ffc107 !important;
+}
+
+/* Booking Form */
+.booking-form .form-label {
+    font-weight: 500;
+}
+
+/* Related Rooms */
+.related-room-item {
+    transition: background-color 0.2s;
+}
+
+.related-room-item:hover {
+    background-color: #f8f9fa;
+}
+
+.related-room-img {
+    width: 80px;
+    height: 60px;
+    overflow: hidden;
+}
+
+.related-room-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.related-room-info h6 {
+    margin-bottom: 3px;
+    font-size: 15px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .main-image img {
+        height: 250px;
+    }
+    
+    .thumbnail {
+        height: 80px;
+    }
+    
+    .more-images-overlay {
+        height: 80px;
+    }
+
+    .room-title {
+        font-size: 22px;
+    }
+    
+    .booking-summary {
+        position: static !important;
+    }
+}
