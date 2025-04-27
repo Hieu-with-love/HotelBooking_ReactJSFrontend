@@ -1,0 +1,197 @@
+/* Booking Details Page Styles */
+
+/* Breadcrumb */
+.breadcrumb-top {
+    font-size: 14px;
+    color: #666;
+}
+
+.breadcrumb-item {
+    cursor: pointer;
+}
+
+.breadcrumb-item:hover {
+    color: #007cc2;
+}
+
+.breadcrumb-item.active {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Room Card Item */
+.room-card-item {
+    transition: box-shadow 0.3s;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.room-card-item:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.room-thumbnail {
+    height: 120px;
+    object-fit: cover;
+}
+
+.room-specs {
+    color: #666;
+    font-size: 14px;
+}
+
+.room-amenities .badge {
+    padding: 5px 10px;
+    margin-right: 5px;
+    border-radius: 4px;
+}
+
+/* Payment Methods */
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-option:hover {
+    background-color: #f8f9fa;
+}
+
+.payment-option.selected {
+    border-color: #007cc2;
+    background-color: #f0f7fc;
+}
+
+.payment-radio {
+    margin-right: 15px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+.payment-radio input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.payment-radio label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #dee2e6;
+    background-color: white;
+    cursor: pointer;
+}
+
+.payment-radio input[type="radio"]:checked + label:after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #007cc2;
+}
+
+.payment-option.selected .payment-radio label {
+    border-color: #007cc2;
+}
+
+.payment-content {
+    flex-grow: 1;
+}
+
+.payment-logo {
+    margin-left: auto;
+    color: #007cc2;
+}
+
+/* Booking Summary */
+.booking-summary {
+    position: sticky;
+    top: 20px;
+}
+
+.booking-summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.booking-summary-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.summary-divider {
+    margin: 10px 0;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.total-price {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.total-price .price {
+    color: #007cc2;
+}
+
+.booking-button {
+    background-color: #007cc2;
+    border-color: #007cc2;
+}
+
+.booking-button:hover {
+    background-color: #005fa3;
+    border-color: #005fa3;
+}
+
+/* Important Notes */
+.important-notes {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+.important-notes li {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .room-thumbnail {
+        height: 140px;
+    }
+    
+    .booking-summary {
+        position: static;
+        margin-top: 20px;
+    }
+    
+    .payment-option {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .payment-logo {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}

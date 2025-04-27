@@ -1,13 +1,59 @@
-import React, { useState } from 'react'
-import { Col, Container, Row } from 'react-bootstrap'
+import React, { useState, useEffect } from 'react'
+import { Col, Container, Row, Alert } from 'react-bootstrap'
 import { FaGoogle, FaApple, FaFacebook } from "react-icons/fa";
 import './login.css'
 import { useNavigate } from 'react-router-dom';
 import imgBackground from '../../assets/images/zotel-background.png'
-
+import { useAuth } from '../../context/AuthContext';
 
 const LoginPage = () => {
+    const [loginForm, setLoginForm] = useState({
+        email: "",
+        password: ""
+    })
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    
     const navigate = useNavigate();
+    const { login, currentUser } = useAuth();
+    
+    // Redirect if user is already logged in
+    useEffect(() => {
+        if (currentUser) {
+            navigate('/');
+        }
+    }, [currentUser, navigate]);
+
+    const hanldChangeLoginForm = (e) => {
+        const {name, value} = e.target;
+        setLoginForm({
+            ...loginForm,
+            [name]: value
+        })
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        // Form validation
+        if (!loginForm.email || !loginForm.password) {
+            setError('Vui lòng nhập đầy đủ thông tin');
+            return;
+        }
+        
+        try {
+            setError('');
+            setLoading(true);
+            const data = await login(loginForm.email, loginForm.password);
+            console.log('Login successful:', data);
+            navigate('/');
+        } catch (err) {
+            console.error('Login error:', err);
+            setError('Email hoặc mật khẩu không chính xác');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <>
@@ -27,13 +73,13 @@ const LoginPage = () => {
                                     </h3>
                                     <ul>
                                         <li>
-                                            <i class="bi bi-check2"></i> <span>Mở khóa giá thành viên và ưu đãi cho khách hàng thân thiết</span>
+                                            <i className="bi bi-check2"></i> <span>Mở khóa giá thành viên và ưu đãi cho khách hàng thân thiết</span>
                                         </li>
                                         <li>
-                                            <i class="bi bi-check2"></i> <span>Dễ dàng xem lại nơi lưu trú đã lưu từ bất cứ thiết bị nào</span>
+                                            <i className="bi bi-check2"></i> <span>Dễ dàng xem lại nơi lưu trú đã lưu từ bất cứ thiết bị nào</span>
                                         </li>
                                         <li>
-                                            <i class="bi bi-check2"></i> <span>Tiết kiệm lớn nhờ thông báo giá trên app của chúng tôi</span>
+                                            <i className="bi bi-check2"></i> <span>Tiết kiệm lớn nhờ thông báo giá trên app của chúng tôi</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -42,7 +88,6 @@ const LoginPage = () => {
                         <Col md={6}>
                             <div className='zotel-section'>
                                 <div className='logo'>
-                                    {/* <h5>ZotelStay</h5> */}
                                     <img src={imgBackground}
                                         alt="logo"
                                         className='img-fluid zotel-logo'
@@ -58,21 +103,35 @@ const LoginPage = () => {
                                     <h3 className='title'>
                                         Tiết kiệm nhiều hơn khi là thành viên
                                     </h3>
-                                    <form>
+                                    
+                                    {error && <Alert variant="danger">{error}</Alert>}
+                                    
+                                    <form onSubmit={handleSubmit}>
                                         <span className='login-title'>
                                             Đăng nhập bằng email và mật khẩu đã tạo
                                         </span>
-                                        <input type="email"
+                                        <input 
+                                            type="email"
+                                            name='email'
                                             className='form-control login-input'
                                             placeholder='Nhập địa chỉ email'
+                                            onChange={hanldChangeLoginForm}
+                                            required
                                         />
-                                        <input type="password"
+                                        <input 
+                                            type="password"
+                                            name='password'
                                             className='form-control login-input'
                                             placeholder='Nhập mật khẩu'
+                                            onChange={hanldChangeLoginForm}
+                                            required
                                         />
-                                        <button className='btn btn-primary login-btn'
+                                        <button 
+                                            type="submit"
+                                            className='btn btn-primary login-btn'
+                                            disabled={loading}
                                         >
-                                            Tiếp tục
+                                            {loading ? 'Đang xử lý...' : 'Tiếp tục'}
                                         </button>
                                     </form>
 
@@ -95,7 +154,6 @@ const LoginPage = () => {
                                                 <FaFacebook className="me-2 text-primary" /> Facebook
                                             </button>
                                         </div>
-
                                     </div>
                                 </div>
 

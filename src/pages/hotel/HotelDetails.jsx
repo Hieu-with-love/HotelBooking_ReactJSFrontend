@@ -74,7 +74,7 @@ const HotelDetails = () => {
     const handleProceedToBooking = () => {
         if (selectedRooms.length > 0) {
             // Navigate to booking details page with the selected room data
-            navigate('/booking-detail', { state: { selectedRooms, hotel: hotelDetails } });
+            navigate('/booking-details', { state: { selectedRooms, hotel: hotelDetails } });
         } else {
             alert("Vui lòng chọn ít nhất một phòng để tiếp tục.");
         }
