@@ -66,13 +66,9 @@ const HotelList = () => {
         }
         const imagePath = hotel.images[0].url;
 
-        if (imagePath.startsWith('http')) {
+        if (imagePath.startsWith('https')) {
             return imagePath; // đã là URL đầy đủ
         }
-
-        console.log(imagePath);
-
-        return `${CLOUDINARY_BASE_URL}${imagePath}`; // nối link Cloudinary + public_id
     }
 
 
