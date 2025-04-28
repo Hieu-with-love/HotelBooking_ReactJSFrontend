@@ -58,20 +58,24 @@ const HotelList = () => {
         }
     };
 
-    // Show image url or default image
+    const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dflwowhcc/image/upload/";
+
     const getImageUrl = (hotel) => {
-        if (!hotel.images || hotel.images.length === 0){
-            return defaultHotelImg; // Default image
-        }else {
-            const imagePath = hotel.images[0].url;
-            // Check if the path already includes the base URL
-            if (imagePath.startsWith('http')) {
-                return imagePath;
-            }
-            // Construct the full URL to the uploaded image
-            return `${API_BASE_URL}/images/${imagePath}`;
+        if (!hotel || !hotel.images || hotel.images.length === 0 || !hotel.images[0].url) {
+            return defaultHotelImg; // fallback
         }
+        const imagePath = hotel.images[0].url;
+
+        if (imagePath.startsWith('http')) {
+            return imagePath; // đã là URL đầy đủ
+        }
+
+        console.log(imagePath);
+
+        return `${CLOUDINARY_BASE_URL}${imagePath}`; // nối link Cloudinary + public_id
     }
+
+
 
     // Get safe text value (prevent rendering objects directly)
     const getSafeValue = (value, defaultValue = "N/A") => {
@@ -87,27 +91,27 @@ const HotelList = () => {
     // Get room count properly regardless of data format
     const getRoomCount = (hotel) => {
         if (!hotel) return 0;
-        
+
         // If rooms is a number, return it directly
         if (typeof hotel.rooms === 'number') {
             return hotel.rooms;
         }
-        
+
         // If rooms is an array, return the array length
         if (Array.isArray(hotel.rooms)) {
             return hotel.rooms.length;
         }
-        
+
         // If there's a roomCount property, use that
         if (typeof hotel.roomCount === 'number') {
             return hotel.roomCount;
         }
-        
+
         // If there's a rooms object with a length property
         if (hotel.rooms && typeof hotel.rooms === 'object' && hotel.rooms.length) {
             return hotel.rooms.length;
         }
-        
+
         // Default to 0 if we can't find room information
         return 0;
     };
@@ -120,29 +124,29 @@ const HotelList = () => {
     // Create pagination items
     const renderPaginationItems = () => {
         let items = [];
-        
+
         // Add first page
         items.push(
-            <Pagination.First 
-                key="first" 
+            <Pagination.First
+                key="first"
                 onClick={() => handlePageChange(0)}
-                disabled={currentPage === 0} 
+                disabled={currentPage === 0}
             />
         );
-        
+
         // Add previous page
         items.push(
-            <Pagination.Prev 
-                key="prev" 
+            <Pagination.Prev
+                key="prev"
                 onClick={() => handlePageChange(Math.max(0, currentPage - 1))}
-                disabled={currentPage === 0} 
+                disabled={currentPage === 0}
             />
         );
 
         // Determine the range of page numbers to show
         let startPage = Math.max(0, currentPage - 2);
         let endPage = Math.min(totalPages - 1, currentPage + 2);
-        
+
         // Ensure we always show at least 5 pages if available
         if (endPage - startPage < 4 && totalPages > 5) {
             if (currentPage < 2) {
@@ -153,7 +157,7 @@ const HotelList = () => {
                 startPage = Math.max(0, totalPages - 5);
             }
         }
-        
+
         // Add page numbers
         for (let number = startPage; number <= endPage; number++) {
             items.push(
@@ -166,7 +170,7 @@ const HotelList = () => {
                 </Pagination.Item>
             );
         }
-        
+
         // Add next page
         items.push(
             <Pagination.Next
@@ -175,7 +179,7 @@ const HotelList = () => {
                 disabled={currentPage === totalPages - 1 || totalPages === 0}
             />
         );
-        
+
         // Add last page
         items.push(
             <Pagination.Last
@@ -184,7 +188,7 @@ const HotelList = () => {
                 disabled={currentPage === totalPages - 1 || totalPages === 0}
             />
         );
-        
+
         return items;
     };
 
@@ -252,13 +256,13 @@ const HotelList = () => {
                                             <div>
                                                 {hotel.originalPrice && hotel.discount && (
                                                     <span className="original-price">
-                                                        {typeof hotel.originalPrice === 'number' 
+                                                        {typeof hotel.originalPrice === 'number'
                                                             ? hotel.originalPrice.toLocaleString('vi-VN')
                                                             : getSafeValue(hotel.originalPrice)}đ
                                                     </span>
                                                 )}
                                                 <div className="current-price">
-                                                    {typeof hotel.price === 'number' 
+                                                    {typeof hotel.price === 'number'
                                                         ? `${hotel.price.toLocaleString('vi-VN')}đ`
                                                         : getSafeValue(hotel.price, "Liên hệ")} / đêm
                                                 </div>
@@ -274,7 +278,7 @@ const HotelList = () => {
                             </Col>
                         ))}
                     </Row>
-                    
+
                     {/* Pagination Controls */}
                     {totalPages > 1 && (
                         <div className="d-flex justify-content-center mt-4">
@@ -283,7 +287,7 @@ const HotelList = () => {
                             </Pagination>
                         </div>
                     )}
-                    
+
                     {/* Pagination Info */}
                     <div className="text-center mt-2">
                         <small className="text-muted">
