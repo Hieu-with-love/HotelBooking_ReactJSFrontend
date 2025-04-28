@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import './HotelManagement.css';
+import defaultHotelImg from '../../../assets/images/default_hotel_img.jpeg'; // Default image for hotels
 
 const HotelManagement = () => {
   const [hotels, setHotels] = useState([]);
