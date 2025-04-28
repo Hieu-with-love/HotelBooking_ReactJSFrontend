@@ -99,11 +99,8 @@ const RoomDetails = () => {
 
     const imagePath = image.url;
 
-    if (imagePath.startsWith('http')) {
-      return imagePath;
-    } else {
-      return `${API_BASE_URL}/images/${imagePath}`;
-    }
+    // If it's already a full URL (Cloudinary), use it directly
+    return imagePath.startsWith('http') ? imagePath : defaultHotelImg;
   };
 
   const existsFreeWifi = (services) => {

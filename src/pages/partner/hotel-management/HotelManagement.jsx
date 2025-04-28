@@ -138,6 +138,18 @@ const HotelManagement = () => {
     });
   };
 
+  // Function to get image URL
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return defaultHotelImg;
+    
+    // If it's already a full URL (Cloudinary), use it directly
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    return defaultHotelImg;
+  };
+
   return (
     <div className="hotel-management">
       <div className="page-header">

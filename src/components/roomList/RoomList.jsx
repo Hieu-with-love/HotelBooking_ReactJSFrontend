@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { getRooms } from '../../api/roomApi';
+import defaultHotelImg from '../../assets/images/default_hotel_img.jpeg';
 
 const RoomList = () => {
 
@@ -22,6 +24,18 @@ const RoomList = () => {
 
         fetchRooms();
     }, [])
+
+    // Function to get room image URL - now using Cloudinary URLs directly
+    const getRoomImageUrl = (room) => {
+        if (!room || !room.images || room.images.length === 0) {
+            return defaultHotelImg;
+        }
+        
+        const imagePath = room.images[0].url;
+        
+        // If it's already a full URL (Cloudinary), use it directly
+        return imagePath.startsWith('http') ? imagePath : defaultHotelImg;
+    }
 
     return (
         <div>RoomList</div>

@@ -102,17 +102,16 @@ const HotelDetails = () => {
             if (!hotelDetails.images || hotelDetails.images.length === 0) {
                 return defaultHotelImg; // Default image
             } else {
-                return `${API_BASE_URL}/images/${hotelDetails.images[0].url}`
+                // Use the hotel image directly if it's a full URL (Cloudinary)
+                const hotelImage = hotelDetails.images[0].url;
+                return hotelImage.startsWith('http') ? hotelImage : defaultHotelImg;
             }
         }
 
         const imagePath = room.images[0].url;
 
-        if (imagePath.startsWith('http')) {
-            return imagePath;
-        } else {
-            return `${API_BASE_URL}/images/${imagePath}`;
-        }
+        // If it's already a full URL (likely Cloudinary), use it directly
+        return imagePath.startsWith('http') ? imagePath : defaultHotelImg;
     }
 
     const getHotelImageUrl = (index = 0) => {
@@ -122,11 +121,8 @@ const HotelDetails = () => {
         
         const imagePath = hotelDetails.images[index].url;
         
-        if (imagePath.startsWith('http')) {
-            return imagePath;
-        } else {
-            return `${API_BASE_URL}/images/${imagePath}`;
-        }
+        // If it's already a full URL (likely Cloudinary), use it directly
+        return imagePath.startsWith('http') ? imagePath : defaultHotelImg;
     }
 
     const existsFreeWifi = (services) => {
