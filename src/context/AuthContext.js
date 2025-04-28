@@ -10,12 +10,33 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [isVerifying, setIsVerifying] = useState(false);
 
-  // Load user from localStorage on initial render
-  useEffect(() => {
-    const user = AuthApi.getCurrentUser();
-    setCurrentUser(user);
-    setLoading(false);
-  }, []);
+  // Function to fetch current user data
+  const fetchCurrentUser = async () => {
+    try {
+      const jwt = localStorage.getItem("jwt");
+      if (!jwt) {
+        setCurrentUser(null);
+        return null;
+      }
+      
+      const user = await AuthApi.getCurrentUser();
+      if (user) {
+        setCurrentUser(user);
+        return user;
+      } else {
+        setCurrentUser(null);
+        return null;
+      }
+    } catch (err) {
+      console.log("Error fetching user data:", err);
+      if (err.response && err.response.status === 401) {
+        // Token expired or invalid, clear local storage
+        localStorage.removeItem("jwt");
+        setCurrentUser(null);
+      }
+      return null;
+    }
+  };
 
   // Login function
   const login = async (email, password) => {
@@ -23,7 +44,7 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     try {
       const data = await AuthApi.login({ email, password });
-      setCurrentUser(data);
+      await fetchCurrentUser(); // Fetch user data after successful login
       return data;
     } catch (err) {
       setError(err.message || 'Failed to login');
@@ -66,9 +87,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Logout function
-  const logout = () => {
-    AuthApi.logout();
-    setCurrentUser(null);
+  const logout = async () => {
+    try {
+      await AuthApi.logout();
+    } finally {
+      // Always clear user state even if API call fails
+      setCurrentUser(null);
+    }
   };
 
   const value = {
@@ -79,7 +104,8 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
-    verifyEmail
+    verifyEmail,
+    refreshUser: fetchCurrentUser // Export the refresh function
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

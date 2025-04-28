@@ -44,7 +44,7 @@ const Navbar = () => {
                             // Show user avatar/name for authenticated users
                             <div className="feature-item authenticated-user">
                                 <i className="bi bi-person-fill"></i>
-                                <span>{currentUser.fullName?.split(' ').pop() || 'User'}</span>
+                                <span>{currentUser && currentUser.firstName ? currentUser.firstName.split(' ').pop() : 'User'}</span>
                             </div>
                         )}
                         
