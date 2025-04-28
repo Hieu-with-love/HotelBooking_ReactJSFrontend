@@ -48,10 +48,10 @@ const AppRoutes = () => {
         
         {/* Partner Dashboard routes - nested under a layout with sidebar */}
         <Route path='/partner' element={<Dashboard />}>
-          <Route path='/dashboard' element={<DashboardHome />} />
-          <Route path='/hotel-management' element={<HotelManagement />} />
-          <Route path='/room-management' element={<RoomManagement />} />
-          <Route path='/discount-management' element={<DiscountManagement />} />
+          <Route path='/partner/dashboard' element={<DashboardHome />} />
+          <Route path='/partner/hotel-management' element={<HotelManagement />} />
+          <Route path='/partner/room-management' element={<RoomManagement />} />
+          <Route path='/partner/discount-management' element={<DiscountManagement />} />
         </Route>
       </Routes>
     </>
