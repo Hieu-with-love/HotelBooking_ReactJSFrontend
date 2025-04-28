@@ -1,0 +1,125 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-color: #1e293b;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  transition: width 0.3s ease;
+  z-index: 100;
+}
+
+.sidebar.open {
+  width: 250px;
+}
+
+.sidebar.closed {
+  width: 70px;
+}
+
+.sidebar-logo {
+  padding: 15px 20px;
+  height: 60px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-logo h3 {
+  margin: 0;
+  font-size: 20px;
+  color: white;
+  font-weight: 600;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar.closed .sidebar-logo h3 {
+  opacity: 0;
+}
+
+.sidebar-menu {
+  flex: 1;
+  padding: 15px 0;
+  overflow-y: auto;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  position: relative;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar-item:hover, .sidebar-item.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.sidebar-item .material-icons {
+  font-size: 20px;
+  min-width: 30px;
+}
+
+.sidebar-text {
+  margin-left: 10px;
+  white-space: nowrap;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar.closed .sidebar-text {
+  opacity: 0;
+}
+
+.sidebar-footer {
+  padding: 15px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Submenu styles */
+.submenu-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.3s;
+}
+
+.submenu-toggle.active {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.sidebar.closed .submenu-toggle {
+  opacity: 0;
+}
+
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.submenu.active {
+  max-height: 300px; /* Adjust based on submenu content */
+}
+
+.submenu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px 10px 60px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.submenu-item:hover, .submenu-item.active {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+}
