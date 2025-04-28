@@ -116,20 +116,20 @@ const BookingDetails = () => {
                 return;
             }
 
-            const bookingNavigate = {
+            const bookingConfimation = {
                 bookingId: response.bookingId,
                 paymentMethod: selectedPaymentMethod,
                 totalAmount: response.totalPrice,
                 hotel: hotel,
                 selectedRooms: response.selectedRooms,
                 checkInDate: response.checkInDate,
-                checkOutDate: response.checkOutDate
+                checkOutDate: response.checkOutDate,
+                user: response.user
             }
-            console.log("Booking Navigate Data:", bookingNavigate);
 
             // Navigate to booking confirmation page
             navigate('/booking-confirmation', {
-                state: bookingNavigate
+                state: {bookingConfimation, hotel: hotel, selectedRooms: selectedRooms}
             });
 
         } catch (err) {

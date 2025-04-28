@@ -44,8 +44,13 @@ const LoginPage = () => {
         try {
             setError('');
             setLoading(true);
-            const data = await login(loginForm.email, loginForm.password);
-            console.log('Login successful:', data);
+            
+            // Just call login - it already fetches user data internally
+            await login(loginForm.email, loginForm.password);
+            
+            // No need to call refreshUser() - removed to avoid duplicate API calls
+            
+            // Navigate to home page after successful login
             navigate('/');
         } catch (err) {
             console.error('Login error:', err);

@@ -37,13 +37,34 @@ const AuthApi = {
   
   // Logout user and remove data from storage
   logout: () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("jwt");
   },
   
   // Get current authenticated user information
-  getCurrentUser: () => {
-    const userStr = localStorage.getItem("user");
-    return userStr ? JSON.parse(userStr) : null;
+  getCurrentUser: async () => {
+    try {
+      const jwt = localStorage.getItem("jwt");
+      
+      // If no JWT token is present, there's no authenticated user
+      if (!jwt) {
+        return null;
+      }
+      
+      const response = await api.get("/api/auth/current-user", {
+        headers: {
+          Authorization: `Bearer ${jwt}`
+        }
+      });
+      
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching current user:", error);
+      if (error.response && error.response.status === 401) {
+        // Token expired or invalid, clear it from storage
+        localStorage.removeItem("jwt");
+      }
+      throw error;
+    }
   },
   
   // Update user profile
@@ -60,9 +81,9 @@ const AuthApi = {
   
   // Generate authorization header with JWT token
   authHeader: () => {
-    const user = AuthApi.getCurrentUser();
-    if (user && user.token) {
-      return { Authorization: `Bearer ${user.token}` };
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      return { Authorization: `Bearer ${jwt}` };
     } else {
       return {};
     }
