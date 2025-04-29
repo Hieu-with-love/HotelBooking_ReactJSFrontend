@@ -9,7 +9,8 @@
   flex-direction: column;
   overflow-x: hidden;
   transition: width 0.3s ease;
-  z-index: 100;
+  z-index: 1000;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar.open {
@@ -21,16 +22,17 @@
 }
 
 .sidebar-logo {
-  padding: 15px 20px;
-  height: 60px;
+  padding: 0 20px;
+  height: 70px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 }
 
 .sidebar-logo h3 {
   margin: 0;
-  font-size: 20px;
+  font-size: 22px;
   color: white;
   font-weight: 600;
   transition: opacity 0.3s ease;
@@ -49,28 +51,50 @@
 .sidebar-item {
   display: flex;
   align-items: center;
-  padding: 12px 20px;
+  padding: 14px 20px;
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   position: relative;
   transition: background-color 0.3s, color 0.3s;
+  margin-bottom: 5px;
 }
 
 .sidebar-item:hover, .sidebar-item.active {
   background-color: rgba(255, 255, 255, 0.1);
   color: white;
+  border-radius: 0 6px 6px 0;
+}
+
+.sidebar-item.active {
+  position: relative;
+}
+
+.sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background-color: #3b82f6;
 }
 
 .sidebar-item .material-icons {
-  font-size: 20px;
+  font-size: 22px;
   min-width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sidebar-text {
-  margin-left: 10px;
+  margin-left: 15px;
   white-space: nowrap;
   opacity: 1;
   transition: opacity 0.3s ease;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
 .sidebar.closed .sidebar-text {
@@ -78,7 +102,7 @@
 }
 
 .sidebar-footer {
-  padding: 15px 0;
+  padding: 20px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -113,7 +137,7 @@
 .submenu-item {
   display: flex;
   align-items: center;
-  padding: 10px 20px 10px 60px;
+  padding: 12px 20px 12px 65px;
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   transition: background-color 0.3s, color 0.3s;
@@ -122,4 +146,18 @@
 .submenu-item:hover, .submenu-item.active {
   background-color: rgba(255, 255, 255, 0.05);
   color: white;
+}
+
+/* Prevent scrollbar from shifting layout */
+.sidebar-menu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1);
 }

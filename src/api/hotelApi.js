@@ -6,7 +6,7 @@ const API_URL = 'http://localhost:8088/api/partner/hotels';
 // Get all hotels with pagination
 export const getHotels = async (page = 0, size = 10) => {
     try {
-        const response = await api.get(`/api/hotels?page=${page}&size=${size}`);
+        const response = await api.get(`/api/partner/hotels?page=${page}&size=${size}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching hotels:', error);
@@ -17,7 +17,7 @@ export const getHotels = async (page = 0, size = 10) => {
 // Get hotel by ID
 export const getHotelById = async (id) => {
     try {
-        const response = await api.get(`/api/hotels/${id}`);
+        const response = await api.get(`/api/partner/hotels/${id}`);
         return response.data;
     } catch (error) {
         console.error(`Error fetching hotel with id ${id}:`, error);

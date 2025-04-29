@@ -33,7 +33,7 @@ const Sidebar = ({ isOpen }) => {
           to="/partner/hotel-management" 
           className={`sidebar-item ${isMenuActive('/partner/hotel-management') ? 'active' : ''}`}
         >
-          <span className="material-icons">hotel</span>
+          <span className="material-icons">apartment</span>
           <span className="sidebar-text">Hotel Management</span>
         </Link>
         
@@ -41,7 +41,7 @@ const Sidebar = ({ isOpen }) => {
           to="/partner/room-management" 
           className={`sidebar-item ${isMenuActive('/partner/room-management') ? 'active' : ''}`}
         >
-          <span className="material-icons">meeting_room</span>
+          <span className="material-icons">king_bed</span>
           <span className="sidebar-text">Room Management</span>
         </Link>
         
@@ -49,7 +49,7 @@ const Sidebar = ({ isOpen }) => {
           to="/partner/discount-management" 
           className={`sidebar-item ${isMenuActive('/partner/discount-management') ? 'active' : ''}`}
         >
-          <span className="material-icons">local_offer</span>
+          <span className="material-icons">discount</span>
           <span className="sidebar-text">Discount Management</span>
         </Link>
         
@@ -57,7 +57,7 @@ const Sidebar = ({ isOpen }) => {
           to="/partner/bookings" 
           className={`sidebar-item ${isMenuActive('/partner/bookings') ? 'active' : ''}`}
         >
-          <span className="material-icons">calendar_month</span>
+          <span className="material-icons">book_online</span>
           <span className="sidebar-text">Bookings</span>
         </Link>
       </div>

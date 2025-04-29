@@ -1,62 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../../../context/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 import './HotelManagement.css';
 import defaultHotelImg from '../../../assets/images/default_hotel_img.jpeg'; // Default image for hotels
+import { getHotels } from '../../../api/hotelApi';
 
 const HotelManagement = () => {
+  const navigate = useNavigate();
   const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [newHotel, setNewHotel] = useState({
-    name: '',
-    address: '',
-    city: '',
-    description: '',
-    amenities: '',
-    imageUrl: ''
-  });
-  const { currentUser } = useAuth();
-
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10); // Set the default page size
+  const [totalPages, setTotalPages] = useState(0); // Total number of pages
+  const [totalElements, setTotalElements] = useState(0); // Total number of elements
+  const [numberOfElements, setNumberOfElements] = useState(0); // Number of elements in the current page
+  
   useEffect(() => {
     fetchHotels();
-  }, []);
+  }, [currentPage, pageSize]);
 
   const fetchHotels = async () => {
     try {
       setLoading(true);
-      // Replace this with your actual API call
-      // const response = await fetch('/api/partner/hotels', {
-      //   headers: {
-      //     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-      //   }
-      // });
-      // const data = await response.json();
-      // For demo, using mock data
-      const mockData = [
-        {
-          id: 1,
-          name: 'Grand Hotel',
-          address: '123 Main St',
-          city: 'New York',
-          rating: 4.5,
-          numRooms: 25,
-          imageUrl: '/assets/images/default_hotel_img.jpeg'
-        },
-        {
-          id: 2,
-          name: 'Seaside Resort',
-          address: '45 Beach Rd',
-          city: 'Miami',
-          rating: 4.8,
-          numRooms: 42,
-          imageUrl: '/assets/images/default_hotel_img.jpeg'
-        }
-      ];
+      const fetchedPaginationHotels = await getHotels(currentPage, pageSize);
+      console.log("Fetched hotels:", fetchedPaginationHotels.content);
       
       setTimeout(() => {
-        setHotels(mockData);
+        setHotels(fetchedPaginationHotels.content);
+        setTotalPages(fetchedPaginationHotels.totalPages);
+        setTotalElements(fetchedPaginationHotels.totalElements);
+        setNumberOfElements(fetchedPaginationHotels.numberOfElements);
         setLoading(false);
       }, 500);
     } catch (err) {
@@ -66,60 +39,23 @@ const HotelManagement = () => {
     }
   };
 
-  const handleAddHotel = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      // Replace with actual API call
-      // const response = await fetch('/api/partner/hotels', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-      //   },
-      //   body: JSON.stringify(newHotel)
-      // });
-      // const data = await response.json();
-      
-      // Mock adding a hotel
-      const mockNewHotel = {
-        ...newHotel,
-        id: hotels.length + 1,
-        rating: 0,
-        numRooms: 0,
-        imageUrl: newHotel.imageUrl || '/assets/images/default_hotel_img.jpeg'
-      };
-      
-      setHotels([...hotels, mockNewHotel]);
-      setShowAddModal(false);
-      setNewHotel({
-        name: '',
-        address: '',
-        city: '',
-        description: '',
-        amenities: '',
-        imageUrl: ''
-      });
-    } catch (err) {
-      setError('Failed to add hotel. Please try again.');
-      console.error(err);
-    } finally {
-      setLoading(false);
+  // Handle page change
+  const handlePageChange = (newPage) => {
+    if (newPage >= 0 && newPage < totalPages) {
+      setCurrentPage(newPage);
     }
+  };
+
+  // Handle page size change
+  const handlePageSizeChange = (event) => {
+    setPageSize(parseInt(event.target.value));
+    setCurrentPage(0); // Reset to first page when changing page size
   };
 
   const handleDeleteHotel = async (id) => {
     if (window.confirm('Are you sure you want to delete this hotel?')) {
       try {
         setLoading(true);
-        // Replace with actual API call
-        // await fetch(`/api/partner/hotels/${id}`, {
-        //   method: 'DELETE',
-        //   headers: {
-        //     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-        //   }
-        // });
-        
         // Mock deletion
         setHotels(hotels.filter(hotel => hotel.id !== id));
       } catch (err) {
@@ -131,20 +67,9 @@ const HotelManagement = () => {
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewHotel({
-      ...newHotel,
-      [name]: value
-    });
-  };
-
   // Function to get image URL
   const getImageUrl = (imagePath) => {
-    if (!imagePath) return defaultHotelImg;
-    
-    // If it's already a full URL (Cloudinary), use it directly
-    if (imagePath.startsWith('http')) {
+    if (imagePath.startsWith('https')) {
       return imagePath;
     }
     
@@ -154,19 +79,25 @@ const HotelManagement = () => {
   return (
     <div className="hotel-management">
       <div className="page-header">
-        <h1>Hotel Management</h1>
+        <div className="page-title">
+          <h1><span className="material-icons">apartment</span> Hotel Management</h1>
+          <p>Add, edit and manage your hotel properties</p>
+        </div>
         <button 
           className="btn-primary"
-          onClick={() => setShowAddModal(true)}
+          onClick={() => navigate('/partner/hotel-management/create-hotel')}
         >
           <span className="material-icons">add</span> Add New Hotel
         </button>
       </div>
 
-      {error && <div className="error-message">{error}</div>}
+      {error && <div className="alert alert-error">{error}</div>}
 
       {loading && hotels.length === 0 ? (
-        <div className="loading">Loading hotels...</div>
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading hotels...</p>
+        </div>
       ) : hotels.length === 0 ? (
         <div className="empty-state">
           <span className="material-icons">hotel</span>
@@ -174,134 +105,112 @@ const HotelManagement = () => {
           <p>You haven't added any hotels yet. Click the "Add New Hotel" button to get started.</p>
         </div>
       ) : (
-        <div className="hotel-grid">
-          {hotels.map(hotel => (
-            <div className="hotel-card" key={hotel.id}>
-              <div className="hotel-image">
-                <img src={hotel.imageUrl} alt={hotel.name} />
+        <>
+          <div className="hotel-grid">
+            {hotels.map(hotel => (
+              <div className="hotel-card" key={hotel.id}>
+                <div className="hotel-image">
+                  <img src={getImageUrl(hotel.images && hotel.images.length > 0 ? hotel.images[0].url : '')} alt={hotel.name} />
+                  <div className="hotel-rating">
+                    {/* <span className="material-icons">star</span>
+                    <span>{hotel.rating.toFixed(1)}</span> */}
+                  </div>
+                </div>
+                <div className="hotel-details">
+                  <h3>{hotel.name} - {hotel.businessName}</h3>
+                  <div className="hotel-info">
+                    <p className="hotel-location">
+                      <span className="material-icons">location_on</span>
+                      {hotel.address?.city}
+                    </p>
+                    <p className="hotel-address">
+                      <span className="material-icons">home</span>
+                      {hotel.address?.number} {hotel.address?.street}, {hotel.address?.district}
+                    </p>
+                    <p className="hotel-rooms">
+                      <span className="material-icons">meeting_room</span>
+                      {hotel.rooms ? hotel.rooms.length : (hotel.numRooms || 0)} Rooms
+                    </p>
+                  </div>
+                </div>
+                <div className="hotel-actions">
+                  <div className='action-buttons'>
+                  <Link to={`/partner/hotel-management/edit/${hotel.id}`} className="btn-edit">
+                    <span className="material-icons">edit</span>
+                    Edit
+                  </Link>
+                  <button 
+                    className="btn-delete"
+                    onClick={() => handleDeleteHotel(hotel.id)}
+                  >
+                    <span className="material-icons">delete</span>
+                    Delete
+                  </button>
+                  </div>
+                  <Link to={`/partner/room-management?hotelId=${hotel.id}`} className="btn-rooms">
+                    <span className="material-icons">meeting_room</span> Manage Rooms
+                  </Link>
+                </div>
               </div>
-              <div className="hotel-details">
-                <h3>{hotel.name}</h3>
-                <p><strong>Location:</strong> {hotel.city}</p>
-                <p><strong>Address:</strong> {hotel.address}</p>
-                <p><strong>Rooms:</strong> {hotel.numRooms}</p>
-                <p><strong>Rating:</strong> {hotel.rating} ★</p>
-              </div>
-              <div className="hotel-actions">
-                <Link to={`/partner/hotel-management/edit/${hotel.id}`} className="btn-edit">
-                  <span className="material-icons">edit</span>
-                </Link>
-                <button 
-                  className="btn-delete"
-                  onClick={() => handleDeleteHotel(hotel.id)}
-                >
-                  <span className="material-icons">delete</span>
-                </button>
-                <Link to={`/partner/room-management?hotelId=${hotel.id}`} className="btn-rooms">
-                  <span className="material-icons">meeting_room</span> Manage Rooms
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Add Hotel Modal */}
-      {showAddModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>Add New Hotel</h2>
-              <button 
-                className="modal-close"
-                onClick={() => setShowAddModal(false)}
-              >
-                <span className="material-icons">close</span>
-              </button>
-            </div>
-            <form onSubmit={handleAddHotel}>
-              <div className="form-group">
-                <label htmlFor="name">Hotel Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={newHotel.name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="address">Address</label>
-                <input
-                  type="text"
-                  id="address"
-                  name="address"
-                  value={newHotel.address}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="city">City</label>
-                <input
-                  type="text"
-                  id="city"
-                  name="city"
-                  value={newHotel.city}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="description">Description</label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={newHotel.description}
-                  onChange={handleInputChange}
-                  rows="4"
-                ></textarea>
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="amenities">Amenities (comma separated)</label>
-                <input
-                  type="text"
-                  id="amenities"
-                  name="amenities"
-                  value={newHotel.amenities}
-                  onChange={handleInputChange}
-                  placeholder="WiFi, Pool, Spa, etc."
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="imageUrl">Image URL</label>
-                <input
-                  type="text"
-                  id="imageUrl"
-                  name="imageUrl"
-                  value={newHotel.imageUrl}
-                  onChange={handleInputChange}
-                  placeholder="https://example.com/image.jpg"
-                />
-              </div>
-              
-              <div className="form-actions">
-                <button type="button" className="btn-cancel" onClick={() => setShowAddModal(false)}>
-                  Cancel
-                </button>
-                <button type="submit" className="btn-primary">
-                  Add Hotel
-                </button>
-              </div>
-            </form>
+            ))}
           </div>
-        </div>
+          
+          {/* Pagination Controls */}
+          <div className="pagination-container">
+            <div className="pagination-info">
+              Showing {numberOfElements} of {totalElements} hotels
+            </div>
+            
+            <div className="pagination-controls">
+              <button 
+                className="pagination-button" 
+                onClick={() => handlePageChange(0)}
+                disabled={currentPage === 0}
+              >
+                <span className="material-icons">first_page</span>
+              </button>
+              
+              <button 
+                className="pagination-button" 
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 0}
+              >
+                <span className="material-icons">chevron_left</span>
+              </button>
+              
+              <span className="pagination-text">
+                Page {currentPage + 1} of {totalPages}
+              </span>
+              
+              <button 
+                className="pagination-button" 
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages - 1}
+              >
+                <span className="material-icons">chevron_right</span>
+              </button>
+              
+              <button 
+                className="pagination-button" 
+                onClick={() => handlePageChange(totalPages - 1)}
+                disabled={currentPage === totalPages - 1}
+              >
+                <span className="material-icons">last_page</span>
+              </button>
+              
+              <select 
+                className="page-size-select" 
+                value={pageSize} 
+                onChange={handlePageSizeChange}
+              >
+                <option value="5">5 per page</option>
+                <option value="10">10 per page</option>
+                <option value="20">20 per page</option>
+                <option value="50">50 per page</option>
+              </select>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
