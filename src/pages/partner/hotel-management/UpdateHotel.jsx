@@ -79,7 +79,8 @@ const UpdateHotel = () => {
                     name: hotelData.name || "",
                     businessName: hotelData.businessName || "",
                     description: hotelData.description || "",
-                    images: hotelData.images,                    
+                    images: hotelData.images,
+                    newImages: [],                    
                     // Location
                     address: {
                         number: hotelData.address?.number || "",
@@ -92,7 +93,6 @@ const UpdateHotel = () => {
                     phone: hotelData.phone || "",
                     email: hotelData.email || "",
                     website: hotelData.website || "",
-                    fax: hotelData.fax || "",
                     socialMedia: {
                         facebook: hotelData.socialMedia?.facebook || "",
                         instagram: hotelData.socialMedia?.instagram || "",
@@ -106,8 +106,6 @@ const UpdateHotel = () => {
                         min: hotelData.priceRange?.min || "",
                         max: hotelData.priceRange?.max || "",
                     },
-                    currency: hotelData.currency || "VND",
-                    minimumStay: hotelData.minimumStay || "3_OR_LESS",
                     
                     // Amenities
                     amenities: {
@@ -225,14 +223,14 @@ const UpdateHotel = () => {
             setError(null);
             
             // First, update the hotel without images
-            const { images, ...hotelDataToSubmit } = formData;
+            const { newImages, ...hotelDataToSubmit } = formData;
             const response = await updateHotel(hotelId, hotelDataToSubmit);
             
             // If hotel was updated successfully and we have new images
-            if (response && images && images.length > 0) {
+            if (response && newImages && newImages.length > 0) {
                 // Create FormData for image upload
                 const formData = new FormData();
-                images.forEach((image) => {
+                newImages.forEach((image) => {
                     formData.append('images', image);
                 });
 
@@ -275,11 +273,19 @@ const UpdateHotel = () => {
             
             {/* Error display */}
             {error && typeof error === 'string' && (
-                <div className="error-message">
+                <div className="error-message" style={{
+                    color: 'red',
+                    fontWeight: 'bold',
+                    fontSize: '1.2rem',
+                    padding: '10px',
+                    margin: '10px 0',
+                    borderLeft: '4px solid red',
+                    backgroundColor: 'rgba(255, 0, 0, 0.05)'
+                }}>
                     {error}
                 </div>
             )}
-            
+
             {/* Form container */}
             <div className="form-container">
                 <form onSubmit={handleSubmit}>
@@ -297,7 +303,17 @@ const UpdateHotel = () => {
                                                     className={error?.name ? "error" : ""}
                                                     placeholder="Enter hotel name"
                                                 />
-                                                {error?.name && <div className="error-text">{error.name}</div>}
+                                                {error?.name && <div className="error-text" 
+                                                style={{
+                                                    color: 'red',
+                                                    fontWeight: 'bold',
+                                                    fontSize: '1.2rem',
+                                                    padding: '10px',
+                                                    margin: '10px 0',
+                                                    borderLeft: '4px solid red',
+                                                    backgroundColor: 'rgba(255, 0, 0, 0.05)'
+                                                }}
+                                                >{error.name}</div>}
                                             </div>
                                             
                                             <div className="form-group">
