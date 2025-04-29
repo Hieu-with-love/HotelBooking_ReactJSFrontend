@@ -3,14 +3,29 @@
   top: 0;
   right: 0;
   left: 0;
-  height: 60px;
+  height: 70px;
   background-color: white;
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  z-index: 10;
+  padding: 0 25px;
+  z-index: 99;
+  transition: left 0.3s ease;
+}
+
+/* Style for all links in the header */
+.dashboard-header a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.sidebar-open .dashboard-header {
+  left: 250px;
+}
+
+.sidebar-closed .dashboard-header {
+  left: 70px;
 }
 
 .header-left {
@@ -23,32 +38,83 @@
   margin-left: 15px;
   font-size: 18px;
   font-weight: 500;
-  color: #333;
+  color: #334155;
+}
+
+.header-left a {
+  color: #334155;
+  font-weight: 500;
 }
 
 .sidebar-toggle {
   background: none;
   border: none;
   cursor: pointer;
-  color: #555;
+  color: #64748b;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-toggle .material-icons {
   font-size: 24px;
-  padding: 5px;
+}
+
+.sidebar-toggle a {
+  color: inherit;
+  display: flex;
+  align-items: center;
 }
 
 .sidebar-toggle:hover {
-  background-color: rgba(0,0,0,0.05);
-  border-radius: 4px;
+  background-color: #f1f5f9;
+  color: #2563eb;
 }
 
 .header-right {
   display: flex;
   align-items: center;
+  gap: 20px;
+}
+
+.notification-icon {
+  position: relative;
+  color: #64748b;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.notification-icon:hover {
+  color: #2563eb;
+}
+
+.notification-icon .material-icons {
+  font-size: 22px;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ef4444;
+  color: white;
+  font-size: 10px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
 }
 
 .user-greeting {
-  margin-right: 15px;
   font-size: 14px;
-  color: #555;
+  color: #64748b;
+  font-weight: 500;
 }
 
 .dropdown {
@@ -73,36 +139,118 @@
   background-color: #2563eb;
   color: white;
   font-weight: bold;
+  box-shadow: 0 2px 5px rgba(37, 99, 235, 0.3);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.dropdown-trigger:hover .user-avatar {
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.5);
+  transform: translateY(-1px);
 }
 
 .dropdown:hover .dropdown-menu {
   display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .dropdown-menu {
   display: none;
   position: absolute;
   right: 0;
-  min-width: 160px;
+  min-width: 220px;
   background-color: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  border-radius: 4px;
-  z-index: 20;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  z-index: 100;
+  top: calc(100% + 10px);
+  overflow: hidden;
+}
+
+.dropdown-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-header strong {
+  font-size: 14px;
+  color: #334155;
+  margin-bottom: 2px;
+}
+
+.dropdown-header small {
+  font-size: 12px;
+  color: #64748b;
 }
 
 .dropdown-item {
-  padding: 10px 15px;
+  padding: 12px 16px;
   font-size: 14px;
-  color: #333;
+  color: #334155;
   cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-item .material-icons {
+  font-size: 18px;
+  margin-right: 8px;
+  color: #64748b;
 }
 
 .dropdown-item:hover {
-  background-color: #f5f7fa;
+  background-color: #f1f5f9;
+}
+
+.dropdown-item:last-child {
+  color: #ef4444;
+}
+
+.dropdown-item:last-child .material-icons {
+  color: #ef4444;
+}
+
+.dropdown-item:last-child:hover {
+  background-color: #fee2e2;
 }
 
 .dropdown-divider {
   height: 1px;
-  background-color: #eee;
-  margin: 5px 0;
+  background-color: #e2e8f0;
+  margin: 0;
+}
+
+/* For mobile responsiveness */
+@media screen and (max-width: 768px) {
+  .dashboard-header {
+    left: 0;
+    padding: 0 15px;
+  }
+  
+  .sidebar-open .dashboard-header {
+    left: 70px;
+  }
+  
+  .sidebar-closed .dashboard-header {
+    left: 0;
+  }
+  
+  .header-left h2 {
+    font-size: 16px;
+  }
+  
+  .user-greeting {
+    display: none;
+  }
+  
+  .header-right {
+    gap: 15px;
+  }
 }
