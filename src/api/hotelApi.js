@@ -85,7 +85,7 @@ export const updateHotelImages = async (hotelId, formData) => {
 
 export const updateHotel = async (hotelId, hotelData) => {
     try{
-        const response = await api.put(`/partner/hotels/update/${hotelId}`, hotelData);
+        const response = await api.put(`/api/partner/hotels/update/${hotelId}`, hotelData);
         return response.data;
     }catch (error) {
         return error.response ? error.response.data : error.message;
@@ -94,7 +94,7 @@ export const updateHotel = async (hotelId, hotelData) => {
 
 export const deleteHotel = async (hotelId) => {
     try{
-        const response = await api.delete(`/partner/hotels/delete/${hotelId}`);
+        const response = await api.delete(`/api/partner/hotels/delete/${hotelId}`);
         return response.data;
     }catch (error) {
         return error.response ? error.response.data : error.message;

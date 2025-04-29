@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import './RoomManagement.css';
 
@@ -9,21 +9,10 @@ const RoomManagement = () => {
   const [selectedHotelId, setSelectedHotelId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [newRoom, setNewRoom] = useState({
-    roomNumber: '',
-    roomType: '',
-    capacity: 1,
-    pricePerNight: '',
-    description: '',
-    amenities: '',
-    status: 'available',
-    hotelId: null,
-    imageUrl: ''
-  });
   
   const { currentUser } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchHotels();
@@ -43,13 +32,6 @@ const RoomManagement = () => {
       setSelectedHotelId(hotels[0].id);
     }
   }, [selectedHotelId, hotels]);
-
-  // When a hotel is selected in the add room modal, update the newRoom state
-  useEffect(() => {
-    if (selectedHotelId) {
-      setNewRoom(prev => ({ ...prev, hotelId: selectedHotelId }));
-    }
-  }, [selectedHotelId]);
 
   const fetchHotels = async () => {
     try {
@@ -147,49 +129,6 @@ const RoomManagement = () => {
     }
   };
 
-  const handleAddRoom = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      // Replace with actual API call
-      // const response = await fetch(`/api/partner/hotels/${selectedHotelId}/rooms`, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-      //   },
-      //   body: JSON.stringify(newRoom)
-      // });
-      // const data = await response.json();
-      
-      // Mock adding a room
-      const mockNewRoom = {
-        ...newRoom,
-        id: Math.floor(Math.random() * 1000) + 10,
-        imageUrl: newRoom.imageUrl || '/assets/images/default_hotel_img.jpeg'
-      };
-      
-      setRooms([...rooms, mockNewRoom]);
-      setShowAddModal(false);
-      setNewRoom({
-        roomNumber: '',
-        roomType: '',
-        capacity: 1,
-        pricePerNight: '',
-        description: '',
-        amenities: '',
-        status: 'available',
-        hotelId: selectedHotelId,
-        imageUrl: ''
-      });
-    } catch (err) {
-      setError('Failed to add room. Please try again.');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleDeleteRoom = async (roomId) => {
     if (window.confirm('Are you sure you want to delete this room?')) {
       try {
@@ -213,17 +152,19 @@ const RoomManagement = () => {
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewRoom({
-      ...newRoom,
-      [name]: name === 'capacity' || name === 'pricePerNight' ? Number(value) : value
-    });
-  };
-
   const handleHotelChange = (e) => {
     const hotelId = Number(e.target.value);
     setSelectedHotelId(hotelId);
+  };
+
+  const handleAddNewRoom = () => {
+    // Navigate to the create room page with the selected hotel ID as a query parameter
+    navigate(`/partner/room-management/create?hotelId=${selectedHotelId}`);
+  };
+
+  const handleEditRoom = (roomId) => {
+    // Navigate to the update room page
+    navigate(`/partner/room-management/update/${roomId}`);
   };
 
   // Get the current hotel name
@@ -235,7 +176,7 @@ const RoomManagement = () => {
         <h1>Room Management</h1>
         <button 
           className="btn-primary"
-          onClick={() => setShowAddModal(true)}
+          onClick={handleAddNewRoom}
         >
           <span className="material-icons">add</span> Add New Room
         </button>
@@ -282,7 +223,7 @@ const RoomManagement = () => {
                   <td>${room.pricePerNight.toFixed(2)}</td>
                   <td><span className={`status-badge ${room.status}`}>{room.status}</span></td>
                   <td className="actions">
-                    <button className="btn-edit" onClick={() => console.log(`Edit room ${room.id}`)}>
+                    <button className="btn-edit" onClick={() => handleEditRoom(room.id)}>
                       <span className="material-icons">edit</span>
                     </button>
                     <button 
@@ -296,156 +237,6 @@ const RoomManagement = () => {
               ))}
             </tbody>
           </table>
-        </div>
-      )}
-
-      {/* Add Room Modal */}
-      {showAddModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>Add New Room</h2>
-              <button 
-                className="modal-close"
-                onClick={() => setShowAddModal(false)}
-              >
-                <span className="material-icons">close</span>
-              </button>
-            </div>
-            <form onSubmit={handleAddRoom}>
-              <div className="form-group">
-                <label htmlFor="hotelId">Select Hotel</label>
-                <select
-                  id="hotelId"
-                  name="hotelId"
-                  value={newRoom.hotelId || ''}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">-- Select a Hotel --</option>
-                  {hotels.map(hotel => (
-                    <option key={hotel.id} value={hotel.id}>{hotel.name}</option>
-                  ))}
-                </select>
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="roomNumber">Room Number</label>
-                <input
-                  type="text"
-                  id="roomNumber"
-                  name="roomNumber"
-                  value={newRoom.roomNumber}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="roomType">Room Type</label>
-                <select
-                  id="roomType"
-                  name="roomType"
-                  value={newRoom.roomType}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">-- Select Room Type --</option>
-                  <option value="Standard">Standard</option>
-                  <option value="Deluxe">Deluxe</option>
-                  <option value="Suite">Suite</option>
-                  <option value="Executive">Executive</option>
-                  <option value="Presidential">Presidential</option>
-                </select>
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="capacity">Capacity (Persons)</label>
-                <input
-                  type="number"
-                  id="capacity"
-                  name="capacity"
-                  min="1"
-                  max="10"
-                  value={newRoom.capacity}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="pricePerNight">Price Per Night ($)</label>
-                <input
-                  type="number"
-                  id="pricePerNight"
-                  name="pricePerNight"
-                  min="0"
-                  step="0.01"
-                  value={newRoom.pricePerNight}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="description">Description</label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={newRoom.description}
-                  onChange={handleInputChange}
-                  rows="3"
-                ></textarea>
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="amenities">Amenities (comma separated)</label>
-                <input
-                  type="text"
-                  id="amenities"
-                  name="amenities"
-                  value={newRoom.amenities}
-                  onChange={handleInputChange}
-                  placeholder="WiFi, TV, Mini-bar, etc."
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="status">Status</label>
-                <select
-                  id="status"
-                  name="status"
-                  value={newRoom.status}
-                  onChange={handleInputChange}
-                >
-                  <option value="available">Available</option>
-                  <option value="booked">Booked</option>
-                  <option value="maintenance">Maintenance</option>
-                </select>
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="imageUrl">Image URL</label>
-                <input
-                  type="text"
-                  id="imageUrl"
-                  name="imageUrl"
-                  value={newRoom.imageUrl}
-                  onChange={handleInputChange}
-                  placeholder="https://example.com/room.jpg"
-                />
-              </div>
-              
-              <div className="form-actions">
-                <button type="button" className="btn-cancel" onClick={() => setShowAddModal(false)}>
-                  Cancel
-                </button>
-                <button type="submit" className="btn-primary">
-                  Add Room
-                </button>
-              </div>
-            </form>
-          </div>
         </div>
       )}
     </div>

@@ -23,6 +23,10 @@ import DiscountManagement from './pages/partner/discount-management/DiscountMana
 import PartnerLogin from './pages/partner/auth/PartnerLogin';
 import PartnerRegister from './pages/partner/auth/PartnerRegister';
 import UpdateHotel from './pages/partner/hotel-management/UpdateHotel';
+import CreateDiscount from './pages/partner/discount-management/CreateDiscount';
+import UpdateDiscount from './pages/partner/discount-management/UpdateDiscount';
+import CreateRoom from './pages/partner/room-management/CreateRoom';
+import UpdateRoom from './pages/partner/room-management/UpdateRoom';
 
 // App routes with authentication state management
 const AppRoutes = () => {
@@ -54,8 +58,14 @@ const AppRoutes = () => {
           <Route path='/partner/hotel-management' element={<HotelManagement />} />
           <Route path='/partner/hotel-management/create-hotel' element={<CreateHotel />} />
           <Route path='/partner/hotel-management/edit/:hotelId' element={<UpdateHotel />} />
+          
           <Route path='/partner/room-management' element={<RoomManagement />} />
+          <Route path='/partner/room-management/create' element={<CreateRoom />} />
+          <Route path='/partner/room-management/edit/:roomId' element={<UpdateRoom />} />
+
           <Route path='/partner/discount-management' element={<DiscountManagement />} />
+          <Route path='/partner/discount-management/create' element={<CreateDiscount />} />
+          <Route path='/partner/discount-management/edit/:discountId' element={<UpdateDiscount />} />
         </Route>
       </Routes>
     </>
