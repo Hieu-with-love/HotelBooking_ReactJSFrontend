@@ -116,8 +116,8 @@ const BookingConfirmation = () => {
               <QRCodeSVG
                 value={JSON.stringify({
                   bookingId: bookingConfimation.bookingId,
-                  // firstName: bookingConfimation.user.firstName,
-                  // lastName: bookingConfimation.user.lastName,
+                  firstName: bookingConfimation.user.firstName,
+                  lastName: bookingConfimation.user.lastName,
                   checkIn: bookingConfimation.checkIn,
                   checkOut: bookingConfimation.checkOut
                 })}
