@@ -58,8 +58,6 @@ const HotelList = () => {
         }
     };
 
-    const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dflwowhcc/image/upload/";
-
     const getImageUrl = (hotel) => {
         if (!hotel || !hotel.images || hotel.images.length === 0 || !hotel.images[0].url) {
             return defaultHotelImg; // fallback

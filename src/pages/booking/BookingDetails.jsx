@@ -5,10 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays, faMapMarkerAlt, faUser, faCheck, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../../components/navbar/Navbar';
 import Footer from '../../components/footer/Footer';
-import { API_BASE_URL } from '../../api/apiConfig';
+import { API_URL } from '../../api/apiConfig';
 import axios from 'axios';
 import './bookingDetails.css';
 import { createBooking } from '../../api/bookingApi';
+import default_room_img from '../../assets/images/default_room.jpg'
+import default_hotel_img from '../../assets/images/default_hotel_img.jpeg'  
+import { de } from 'date-fns/locale';
 
 const BookingDetails = () => {
 
@@ -34,19 +37,14 @@ const BookingDetails = () => {
     const getImageUrl = (room) => {
         if (!room.images || room.images.length === 0) {
             if (!hotel.images || hotel.images.length === 0) {
-                return ''; // Default image path
+                return default_hotel_img; // Default image path
             } else {
-                return `${API_BASE_URL}/images/${hotel.images[0].url}`;
+                return default_room_img;
             }
+        }else {
+            return room.images[0].url;
         }
-
-        const imagePath = room.images[0].url;
-
-        if (imagePath.startsWith('http')) {
-            return imagePath;
-        } else {
-            return `${API_BASE_URL}/images/${imagePath}`;
-        }
+        
     };
 
     // Handle book with payment method

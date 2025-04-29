@@ -6,9 +6,9 @@ import { faStar, faMapMarkerAlt, faWifi, faBed, faUser, faCalendarDays, faDollar
 import { getHotelDetailsById, searchRoomsByCriteria } from '../../api/hotelApi';
 import Navbar from '../../components/navbar/Navbar';
 import Footer from '../../components/footer/Footer';
-import { API_BASE_URL } from '../../api/apiConfig';
 import defaultHotelImg from '../../assets/images/default_hotel_img.jpeg';
 import './hotelDetails.css';
+import { API_URL } from '../../api/apiConfig';
 
 const HotelDetails = () => {
     const { id } = useParams();
@@ -122,7 +122,7 @@ const HotelDetails = () => {
         const imagePath = hotelDetails.images[index].url;
         
         // If it's already a full URL (likely Cloudinary), use it directly
-        return imagePath.startsWith('http') ? imagePath : defaultHotelImg;
+        return imagePath.startsWith('https') ? imagePath : defaultHotelImg;
     }
 
     const existsFreeWifi = (services) => {
@@ -273,7 +273,7 @@ const HotelDetails = () => {
                                     {hotelDetails.images && hotelDetails.images.slice(1, 5).map((image, index) => (
                                         <Col xs={6} className="mb-3" key={index}>
                                             <img 
-                                                src={`${API_BASE_URL}/images/${image.url}`} 
+                                                src={getHotelImageUrl(index + 1)} 
                                                 alt={`${hotelDetails.name} - ${index + 1}`}
                                                 className="img-fluid rounded thumbnail"
                                             />

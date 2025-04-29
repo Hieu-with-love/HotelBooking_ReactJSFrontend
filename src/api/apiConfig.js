@@ -1,8 +1,10 @@
 import axios from "axios";
 
-const API_URL = "https://hotelbooking-springbackend.onrender.com";
+// const API_URL = "https://hotelbooking-springbackend.onrender.com";
+export const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dflwowhcc/image/upload/";
 
-// const API_URL = "http://localhost:8088"; // Adjust this to your Spring Boot server URL
+
+export const API_URL = "http://localhost:8088"; // Adjust this to your Spring Boot server URL
 
 export const api = axios.create({
     baseURL: API_URL,
@@ -12,8 +14,6 @@ export const api = axios.create({
 })
 
 // API configuration 
-export const API_BASE_URL = 'http://localhost:8088'; // Adjust this to your Spring Boot server URL
-
 export const register = async (userData) => {
     try {
         const response = await api.post("/auth/signup", userData);
