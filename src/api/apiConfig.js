@@ -11,7 +11,31 @@ export const api = axios.create({
     headers: {
         "Content-type": "application/json"
     }
-})
+});
+
+// Add response interceptor to handle 403 Forbidden responses only for partner routes
+api.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        // Only redirect to NotFound if:
+        // 1. We receive a 403 status code AND
+        // 2. The current path starts with /partner/ AND
+        // 3. User is logged in (has JWT token)
+        if (error.response && error.response.status === 403) {
+            const isAttemptingPartnerRoute = window.location.pathname.startsWith('/partner/');
+            const hasJwtToken = localStorage.getItem('jwt');
+            
+            if (isAttemptingPartnerRoute && hasJwtToken) {
+                window.location.href = '/not-found';
+            }
+            
+            // Otherwise, just let the error propagate normally
+        }
+        return Promise.reject(error);
+    }
+);
 
 // API configuration 
 export const register = async (userData) => {
