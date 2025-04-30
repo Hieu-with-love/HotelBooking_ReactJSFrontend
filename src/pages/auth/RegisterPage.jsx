@@ -11,8 +11,10 @@ const RegisterPage = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        fullName: '',
-        phone: ''
+        firstName: '',
+        lastName: '',
+        phone: '',
+        role: ''
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -40,6 +42,8 @@ const RegisterPage = () => {
             ...prev,
             [name]: value
         }));
+
+        console.log('Form Data:', formData); // Debugging line to check form data
     };
 
     const handleSubmit = async (e) => {
@@ -69,8 +73,11 @@ const RegisterPage = () => {
             const userData = {
                 email: formData.email,
                 password: formData.password,
-                fullName: formData.fullName,
-                phone: formData.phone || null
+                confirmPassword: formData.confirmPassword,
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                phone: formData.phone || null,
+                role: formData.role || null
             };
             
             await register(userData);
