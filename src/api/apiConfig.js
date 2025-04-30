@@ -40,7 +40,7 @@ api.interceptors.response.use(
 // API configuration 
 export const register = async (userData) => {
     try {
-        const response = await api.post("/auth/signup", userData);
+        const response = await api.post("/api/auth/signup", userData);
         return response.data;
     } catch (error) {
         return error.response ? error.response.data : error.message;
@@ -49,7 +49,7 @@ export const register = async (userData) => {
 
 export const login = async (userData) => {
     try {
-        const response = await api.post("/auth/login", userData);
+        const response = await api.post("/api/auth/login", userData);
         return response.data;
     } catch (error) {
         return error.response ? error.response.data : error.message;
@@ -58,7 +58,7 @@ export const login = async (userData) => {
 
 export const verifyAccount = async (token) => {
     try {
-        const response = await api.get(`/auth/verify-account?token=${token}`);
+        const response = await api.get(`/api/auth/verify-account?token=${token}`);
         return response.data;
     } catch (error) {
         return error.response ? error.response.data : error.message;
