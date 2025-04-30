@@ -1,12 +1,18 @@
 import { api } from "./apiConfig";
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8088/api/partner/hotels';
+const jwt = localStorage.getItem('jwt');
+const API_HOTEL_PARTNER_URL = '/api/partner/hotels';
+const API_HOTEL_CUSTOMER_URL = '/api/customer/hotels';
 
 // Get all hotels with pagination
 export const getHotels = async (page = 0, size = 10) => {
     try {
-        const response = await api.get(`/api/partner/hotels?page=${page}&size=${size}`);
+        const response = await api.get(`${API_HOTEL_PARTNER_URL}?page=${page}&size=${size}`, {
+            headers: {
+                'Authorization' : `Bearer ${jwt}`
+            }
+        });
         return response.data;
     } catch (error) {
         console.error('Error fetching hotels:', error);
@@ -17,7 +23,11 @@ export const getHotels = async (page = 0, size = 10) => {
 // Get hotel by ID
 export const getHotelById = async (id) => {
     try {
-        const response = await api.get(`/api/partner/hotels/${id}`);
+        const response = await api.get(`${API_HOTEL_PARTNER_URL}/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        });
         return response.data;
     } catch (error) {
         console.error(`Error fetching hotel with id ${id}:`, error);
@@ -25,34 +35,11 @@ export const getHotelById = async (id) => {
     }
 };
 
-// Get featured hotels
-export const getFeaturedHotels = async (limit = 6) => {
-    try {
-        const response = await api.get(`/hotels/featured?limit=${limit}`);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching featured hotels:', error);
-        throw error;
-    }
-};
-
-// Search hotels
-export const searchHotels = async (params) => {
-    try {
-        const response = await api.get('/api/hotels/search', { params });
-        return response.data;
-    } catch (error) {
-        console.error('Error searching hotels:', error);
-        throw error;
-    }
-};
-
 export const createHotel = async (hotelData) => {
     try {
-        const token = localStorage.getItem('jwt');
-        const response = await axios.post(`${API_URL}/create`, hotelData, {
+        const response = await api.post(`${API_HOTEL_PARTNER_URL}/create`, hotelData, {
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${jwt}`,
                 'Content-Type': 'application/json'
             }
         });
@@ -65,13 +52,12 @@ export const createHotel = async (hotelData) => {
 
 export const updateHotelImages = async (hotelId, formData) => {
     try {
-        const token = localStorage.getItem('jwt');
-        const response = await axios.post(
-            `${API_URL}/create/${hotelId}/images`,
+        const response = await api.post(
+            `${API_HOTEL_PARTNER_URL}/create/${hotelId}/images`,
             formData,
             {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${jwt}`,
                     'Content-Type': 'multipart/form-data'
                 }
             }
@@ -85,7 +71,11 @@ export const updateHotelImages = async (hotelId, formData) => {
 
 export const updateHotel = async (hotelId, hotelData) => {
     try{
-        const response = await api.put(`/api/partner/hotels/update/${hotelId}`, hotelData);
+        const response = await api.put(`${API_HOTEL_PARTNER_URL}/update/${hotelId}`, hotelData, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`,
+            }
+        });
         return response.data;
     }catch (error) {
         return error.response ? error.response.data : error.message;
@@ -94,17 +84,59 @@ export const updateHotel = async (hotelId, hotelData) => {
 
 export const deleteHotel = async (hotelId) => {
     try{
-        const response = await api.delete(`/api/partner/hotels/delete/${hotelId}`);
+        const response = await api.delete(`${API_HOTEL_PARTNER_URL}/delete/${hotelId}`, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        });
         return response.data;
     }catch (error) {
         return error.response ? error.response.data : error.message;
     }
 }
 
+
+// Call api for customer side
+
+// Get featured hotels
+export const getFeaturedHotels = async (limit = 6) => {
+    try {
+        const response = await api.get(`/hotels/featured?limit=${limit}`, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching featured hotels:', error);
+        throw error;
+    }
+};
+
+// Search hotels
+export const searchHotels = async (params) => {
+    try {
+        const response = await api.get(`${API_HOTEL_CUSTOMER_URL}/search`, { params }, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error searching hotels:', error);
+        throw error;
+    }
+};
+
+
 //
 export const getHotelsFromCustomer = async (page, size) => {
     try {
-        const response = await api.get(`/api/customer/hotels?page=${page}&size=${size}`);
+        const response = await api.get(`${API_HOTEL_CUSTOMER_URL}?page=${page}&size=${size}`,{
+            headers:{
+                'Authorization': `Bearer ${jwt}`
+            }
+        });
         return response.data;
     } catch (error) {
         console.error('Error fetching hotels:', error);
@@ -115,7 +147,11 @@ export const getHotelsFromCustomer = async (page, size) => {
 // Get popular hotels in the customer side
 export const getPopularHotels = async () => {
     try{
-        const response = await api.get('/api/customer/hotels/popular');
+        const response = await api.get(`${API_HOTEL_CUSTOMER_URL}/popular`, {
+            headers:{
+                'Authorization': `Bearer ${jwt}`
+            }
+        });
         return response.data;
     }catch (error) {
         return error.response ? error.response.data : error.message;
@@ -125,7 +161,11 @@ export const getPopularHotels = async () => {
 // Get hotel details from the customer side
 export const getHotelDetails = async (hotelId) => {
     try{
-        const reponse = await api.get(`/api/customer/hotels/${hotelId}`);
+        const reponse = await api.get(`${API_HOTEL_CUSTOMER_URL}/${hotelId}`, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        });
         return reponse.data;   
     }catch (error) {
         return error.response ? error.response.data : error.message;
@@ -135,7 +175,11 @@ export const getHotelDetails = async (hotelId) => {
 // Get hotel details from the customer side
 export const getHotelDetailsById = async (hotelId) => {
     try{
-        const response = await api.get(`/api/customer/hotels/${hotelId}`);
+        const response = await api.get(`${API_HOTEL_CUSTOMER_URL}/${hotelId}`, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        });
         return response.data;
     }catch (error) {
         return error.response ? error.response.data : error.message;
@@ -145,7 +189,11 @@ export const getHotelDetailsById = async (hotelId) => {
 // api form search hotel by some criteria
 export const searchRoomsByCriteria = async (criteria) => {
     try{
-        const response = await api.get('/api/customer/hotels/search-rooms', criteria);
+        const response = await api.get(`${API_HOTEL_CUSTOMER_URL}/search-rooms`, criteria, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        });
         return response.data;
     }catch (error) {
         return error.response ? error.response.data : error.message;

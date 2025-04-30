@@ -15,14 +15,14 @@ const LoginPage = () => {
     const [loading, setLoading] = useState(false);
     
     const navigate = useNavigate();
-    const { login, currentUser } = useAuth();
+    const { login, currentUser, redirectBasedOnRole } = useAuth();
     
     // Redirect if user is already logged in
     useEffect(() => {
         if (currentUser) {
-            navigate('/');
+            redirectBasedOnRole(navigate);
         }
-    }, [currentUser, navigate]);
+    }, [currentUser, navigate, redirectBasedOnRole]);
 
     const hanldChangeLoginForm = (e) => {
         const {name, value} = e.target;
@@ -45,15 +45,18 @@ const LoginPage = () => {
             setError('');
             setLoading(true);
             
-            // Just call login - it already fetches user data internally
+            // Call login - it already fetches user data internally
             await login(loginForm.email, loginForm.password);
             
-            // No need to call refreshUser() - removed to avoid duplicate API calls
+            // The useEffect will handle redirection once currentUser is updated
             
-            // Navigate to home page after successful login
-            navigate('/');
         } catch (err) {
             console.error('Login error:', err);
+            
+            // No need to redirect to 404 page on login error
+            // 403 errors should only trigger 404 redirects when accessing protected routes
+            // not during the login process itself
+            
             setError('Email hoặc mật khẩu không chính xác');
         } finally {
             setLoading(false);

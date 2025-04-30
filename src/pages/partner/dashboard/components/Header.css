@@ -148,16 +148,7 @@
   transform: translateY(-1px);
 }
 
-.dropdown:hover .dropdown-menu {
-  display: block;
-  animation: fadeIn 0.2s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
+/* Update the dropdown display behavior to control it with JavaScript */
 .dropdown-menu {
   display: none;
   position: absolute;
@@ -169,6 +160,24 @@
   z-index: 100;
   top: calc(100% + 10px);
   overflow: hidden;
+}
+
+/* New class to show dropdown when toggled */
+.dropdown-menu.show {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+/* Keep the existing hover animation for visual effect */
+.dropdown:hover .dropdown-menu {
+  /* Remove automatic display on hover since we're controlling with JavaScript */
+  /* display: block; */
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .dropdown-header {

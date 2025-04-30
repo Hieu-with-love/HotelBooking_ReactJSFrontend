@@ -12,6 +12,7 @@ import BookingDetails from './pages/booking/BookingDetails';
 import EmailVerificationPage from './pages/auth/EmailVerificationPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import BookingConfirmation from './pages/booking/BookingConfirmation';
+import NotFound from './pages/NotFound';
 
 // Partner Dashboard Components
 import Dashboard from './pages/partner/dashboard/Dashboard';
@@ -67,6 +68,9 @@ const AppRoutes = () => {
           <Route path='/partner/discount-management/create' element={<CreateDiscount />} />
           <Route path='/partner/discount-management/edit/:discountId' element={<UpdateDiscount />} />
         </Route>
+        
+        {/* Not Found route */}
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </>
   );

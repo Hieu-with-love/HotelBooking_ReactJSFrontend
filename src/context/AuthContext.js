@@ -95,6 +95,18 @@ export const AuthProvider = ({ children }) => {
       setCurrentUser(null);
     }
   };
+  
+  // Role-based navigation function
+  const redirectBasedOnRole = (navigate) => {
+    if (!currentUser) return;
+    
+    if (currentUser.role === 'PARTNER') {
+      navigate('/partner');
+    } else {
+      // Default to homepage for CUSTOMER or if role is undefined
+      navigate('/');
+    }
+  };
 
   const value = {
     currentUser,
@@ -105,7 +117,8 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     verifyEmail,
-    refreshUser: fetchCurrentUser // Export the refresh function
+    refreshUser: fetchCurrentUser, // Export the refresh function
+    redirectBasedOnRole // Export the redirect function
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
