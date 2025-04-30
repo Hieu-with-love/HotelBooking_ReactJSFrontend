@@ -18,7 +18,7 @@ const AuthApi = {
   // Register a new user
   register: async (userData) => {
     try {
-      const response = await api.post("/auth/signup", userData);
+      const response = await api.post("/api/auth/signup", userData);
       return response.data;
     } catch (error) {
       return Promise.reject(error.response ? error.response.data : error.message);
@@ -28,7 +28,7 @@ const AuthApi = {
   // Verify account with token received by email
   verifyEmail: async (token) => {
     try {
-      const response = await api.get(`/auth/verify-account?token=${token}`);
+      const response = await api.get(`/api/auth/verify-account?token=${token}`);
       return response.data;
     } catch (error) {
       return Promise.reject(error.response ? error.response.data : error.message);
