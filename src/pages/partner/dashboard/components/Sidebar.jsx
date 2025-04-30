@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Sidebar.css';
 
 const Sidebar = ({ isOpen }) => {
   const location = useLocation();
   const [activeSubmenu, setActiveSubmenu] = useState(null);
+  const navigate = useNavigate();
 
   const toggleSubmenu = (menuName) => {
     setActiveSubmenu(activeSubmenu === menuName ? null : menuName);
@@ -17,7 +18,7 @@ const Sidebar = ({ isOpen }) => {
   return (
     <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
       <div className="sidebar-logo">
-        <h3>ZOTEL</h3>
+        <Link to={'/'}>ZOTEL</Link>
       </div>
       
       <div className="sidebar-menu">

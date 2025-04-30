@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
       const jwt = localStorage.getItem("jwt");
       if (!jwt) {
         setCurrentUser(null);
+        setLoading(false);
         return null;
       }
       
@@ -35,8 +36,15 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(null);
       }
       return null;
+    } finally {
+      setLoading(false);
     }
   };
+
+  // Initialize authentication state on app load
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
 
   // Login function
   const login = async (email, password) => {
@@ -92,6 +100,7 @@ export const AuthProvider = ({ children }) => {
       await AuthApi.logout();
     } finally {
       // Always clear user state even if API call fails
+      localStorage.removeItem("jwt");
       setCurrentUser(null);
     }
   };
@@ -102,9 +111,13 @@ export const AuthProvider = ({ children }) => {
     
     if (currentUser.role === 'PARTNER') {
       navigate('/partner');
-    } else {
+    } else if (currentUser.role === 'CUSTOMER') {
       // Default to homepage for CUSTOMER or if role is undefined
       navigate('/');
+    }else if (currentUser.role === 'ADMIN') {
+      navigate('/admin');
+    }else {
+      navigate('/'); // Default to homepage for any other role
     }
   };
 
@@ -121,7 +134,7 @@ export const AuthProvider = ({ children }) => {
     redirectBasedOnRole // Export the redirect function
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
 };
 
 // Custom hook for using auth context

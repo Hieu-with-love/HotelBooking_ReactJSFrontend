@@ -27,7 +27,39 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
+  justify-content: center; /* Center logo horizontally */
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+.sidebar-logo a {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: transparent;
+  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.sidebar-logo a:hover {
+  transform: scale(1.05);
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+}
+
+.sidebar.closed .sidebar-logo {
   justify-content: flex-start;
+}
+
+.sidebar.closed .sidebar-logo a {
+  font-size: 20px;
+  letter-spacing: 0;
 }
 
 .sidebar-logo h3 {
