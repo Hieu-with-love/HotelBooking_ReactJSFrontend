@@ -82,6 +82,7 @@ const HotelDetails = () => {
 
     useEffect(() => {
         const fetchHotelDetails = async () => {
+            document.title = "Thông tin khách sạn";
             try {
                 setLoading(true);
                 const response = await getHotelDetailsById(id);

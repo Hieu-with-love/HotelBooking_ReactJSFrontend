@@ -18,6 +18,7 @@ const BookingConfirmation = () => {
 
   useEffect(() => {
     console.log('Booking Confirmation:', bookingConfimation);
+    document.title = "Chi tiết đặt phòng";
   }, []);
 
   const formatDate = (dateString) => {

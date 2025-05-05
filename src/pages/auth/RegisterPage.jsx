@@ -34,6 +34,7 @@ const RegisterPage = () => {
         if (isVerifying) {
             navigate('/verify-email', { state: { email: formData.email } });
         }
+        document.title = "Đăng ký";
     }, [isVerifying, navigate, formData.email]);
 
     const handleChange = (e) => {

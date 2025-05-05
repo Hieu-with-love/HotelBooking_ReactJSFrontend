@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import "./home.css"
 import Header from '../../components/header/Header'
 import Featured from '../../components/featured/Featured'
@@ -10,6 +10,11 @@ import Footer from '../../components/footer/Footer'
 const properties = [1, 1, 1, 1, 1]
 
 const Home = () => {
+
+    useEffect(() => {
+        document.title = "Trang chủ"
+    }, [])
+
     return (
         <>
             <Navbar />

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "https://hotelbooking-springbackend.onrender.com";
+const API_URL = "https://zotelbooking.onrender.com";
+// const API_URL = "https://hotelbooking-springbackend.onrender.com";
 export const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dflwowhcc/image/upload/";
 
 

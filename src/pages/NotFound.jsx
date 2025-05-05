@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Row, Col, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/navbar/Navbar';
@@ -6,6 +6,10 @@ import Footer from '../components/footer/Footer';
 
 const NotFound = () => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        document.title = "Not Found"
+    }, [])
 
     return (
         <>

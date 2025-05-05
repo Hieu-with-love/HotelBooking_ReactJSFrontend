@@ -17,6 +17,7 @@ const DiscountManagement = () => {
   
   useEffect(() => {
     fetchDiscounts();
+    document.title = 'Discount Management';
   }, [currentPage, pageSize]);
 
   const fetchDiscounts = async () => {

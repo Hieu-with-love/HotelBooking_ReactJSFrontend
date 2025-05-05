@@ -1,5 +1,6 @@
 import React from 'react';
 import './footer.css';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -31,12 +32,15 @@ const Footer = () => {
             <li className="footer-list-item">Chương trình đối tác</li>
           </ul>
           <ul className="footer-list">
-            <h2 className="footer-title">Thông tin</h2>
-            <li className="footer-list-item">Về chúng tôi</li>
-            <li className="footer-list-item">Tin tức & Blog</li>
-            <li className="footer-list-item">Chính sách bảo mật</li>
-            <li className="footer-list-item">Điều khoản sử dụng</li>
-            <li className="footer-list-item">Liên hệ</li>
+            <h2 className="footer-title">Thông tin về sản phẩm</h2>
+            <li className="footer-list-item">Sản phẩm báo cao cho môn "Công nghệ phần mềm hướng đối tượng</li>
+            <li className="footer-list-item">GVHD: Mai Anh Thơ</li>
+            <li className="footer-list-item mouted-link">
+              <a href='https://github.com/Hieu-with-love'>
+              SVTH: Trần Trung Hiếu - 22110139
+              </a>
+            </li>
+            
           </ul>
         </div>
         <div className="footer-copyright">

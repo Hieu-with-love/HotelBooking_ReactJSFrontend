@@ -69,6 +69,7 @@ const UpdateDiscount = () => {
     if (id) {
       fetchDiscountData();
     }
+    document.title = 'Update Discount';
   }, [id]);
 
   // Handle input changes
