@@ -23,6 +23,8 @@ const RoomManagement = () => {
     if (hotelId) {
       setSelectedHotelId(Number(hotelId));
     }
+
+    document.title = 'Room Management - Partner Dashboard'; // Set the document title
   }, [location.search]);
 
   useEffect(() => {

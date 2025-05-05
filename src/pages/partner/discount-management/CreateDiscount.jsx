@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DiscountManagement.css';
 import { createDiscount } from '../../../api/apiDiscount';
@@ -20,6 +20,10 @@ const CreateDiscount = () => {
     active: true,
     description: ''
   });
+
+  useEffect(() => {
+    document.title = 'Create Discount';
+  }, []);
 
   // Handle input changes
   const handleChange = (e) => {

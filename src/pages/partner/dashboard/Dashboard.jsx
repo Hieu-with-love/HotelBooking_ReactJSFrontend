@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -6,6 +6,10 @@ import './dashboard.css';
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    document.title = 'Dashboard';
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);

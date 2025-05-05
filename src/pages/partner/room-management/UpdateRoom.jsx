@@ -48,6 +48,8 @@ const UpdateRoom = () => {
     };
     
     fetchData();
+
+    document.title = 'Update Room - Partner Dashboard'; // Set the document title
   }, [roomId]);
 
   // Fetch room data

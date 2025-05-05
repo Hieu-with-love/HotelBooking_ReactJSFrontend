@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,6 +21,10 @@ const BookingDetails = () => {
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(''); // 'counter' or 'vnpay'
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    useEffect(() => {
+        document.title = "Xác nhận đặt phòng";
+    }, [])
 
     // Check if we have valid check-in/check-out dates from previous page
     const [checkInDate, setCheckInDate] = useState(

@@ -138,6 +138,7 @@ const UpdateHotel = () => {
         };
         
         fetchHotelData();
+        document.title = 'Update Hotel - Partner Dashboard'; // Set the document title
     }, [hotelId]);
 
     const handleInputChange = (e) => {

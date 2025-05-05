@@ -41,6 +41,7 @@ const RoomDetails = () => {
   });
 
   useEffect(() => {
+
     const fetchRoomDetails = async () => {
       try {
         setLoading(true);
@@ -55,6 +56,7 @@ const RoomDetails = () => {
     };
 
     fetchRoomDetails();
+    document.title = `Chi tiết phòng ${room.name || ''}`; // Set the page title dynamically based on room name
   }, [id]);
 
   const handleBookNow = () => {

@@ -44,6 +44,8 @@ const CreateRoom = () => {
     }
     
     setLoading(false);
+
+    document.title = 'Create Room - Partner Dashboard'; // Set the document title
   }, [location.search]);
 
   // Fetch hotels

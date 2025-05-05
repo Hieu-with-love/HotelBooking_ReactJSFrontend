@@ -22,6 +22,8 @@ const LoginPage = () => {
         if (currentUser) {
             redirectBasedOnRole(navigate);
         }
+
+        document.title = "Đăng nhập";
     }, [currentUser, navigate, redirectBasedOnRole]);
 
     const hanldChangeLoginForm = (e) => {

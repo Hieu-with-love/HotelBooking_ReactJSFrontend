@@ -2,58 +2,121 @@
   width: 100%;
   background-color: #003580;
   color: white;
-  padding: 40px 0;
-  margin-top: 40px;
+  padding: 50px 0 30px;
+  margin-top: 50px;
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .footer-container {
   max-width: 1024px;
   margin: 0 auto;
+  padding: 0 20px;
 }
 
 .footer-lists {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 30px;
 }
 
 .footer-list {
   list-style: none;
   padding: 0;
   margin-bottom: 20px;
-  min-width: 150px;
+  min-width: 180px;
+  flex: 1;
 }
 
 .footer-list-item {
-  margin-bottom: 10px;
-  color: #ffffff;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  padding-left: 5px;
 }
 
 .footer-list-item:hover {
-  text-decoration: underline;
+  color: #FFB700;
+  transform: translateX(5px);
+  text-decoration: none;
+}
+
+.footer-list-item.mouted-link a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+.footer-list-item.mouted-link a:hover {
+  color: #FFB700;
+  text-decoration: none;
 }
 
 .footer-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  color: #fff;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.footer-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 3px;
+  background-color: #FFB700;
 }
 
 .footer-copyright {
-  margin-top: 30px;
+  margin-top: 40px;
   text-align: center;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-copyright p {
+  transition: color 0.3s ease;
+}
+
+.footer-copyright p:hover {
+  color: #FFB700;
 }
 
 @media (max-width: 768px) {
   .footer-lists {
     flex-direction: column;
+    gap: 20px;
   }
   
   .footer-list {
     width: 100%;
-    padding: 0 20px;
+    padding: 0;
+    margin-bottom: 15px;
+  }
+  
+  .footer-title {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 30px 0 20px;
+  }
+  
+  .footer-title {
+    margin-bottom: 15px;
+  }
+  
+  .footer-list-item {
+    margin-bottom: 8px;
   }
 }
