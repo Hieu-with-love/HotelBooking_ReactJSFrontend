@@ -4,7 +4,6 @@ import { FaGoogle, FaApple, FaFacebook } from "react-icons/fa";
 import './register.css'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import imgBackground from '../../assets/images/zotel-background.png'
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -37,22 +36,43 @@ const RegisterPage = () => {
         document.title = "Đăng ký";
     }, [isVerifying, navigate, formData.email]);
 
+    // Validate email format
+    const isValidEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    // Validate Vietnamese phone number
+    const isValidPhone = (phone) => {
+        if (!phone) return true; // Phone is optional
+        const phoneRegex = /^(0|84|\+84)([0-9]{9})$/;
+        return phoneRegex.test(phone);
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
         }));
-
-        console.log('Form Data:', formData); // Debugging line to check form data
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         
         // Form validation
-        if (!formData.email || !formData.password || !formData.confirmPassword || !formData.fullName) {
+        if (!formData.email || !formData.password || !formData.confirmPassword || !formData.firstName || !formData.lastName) {
             setError('Vui lòng nhập đầy đủ thông tin');
+            return;
+        }
+        
+        if (!isValidEmail(formData.email)) {
+            setError('Email không hợp lệ');
+            return;
+        }
+        
+        if (formData.phone && !isValidPhone(formData.phone)) {
+            setError('Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam hợp lệ');
             return;
         }
         
@@ -98,40 +118,11 @@ const RegisterPage = () => {
                 <Container >
                     <Row>
                         <Col md={6}>
-                            <div className='intro-section'>
-                                <div className='intro-section-img'>
-                                    <img src="https://imgcy.trivago.com/c_limit,d_dummy.jpeg,f_auto,q_auto:eco,h_233,dpr_2.0/hardcodedimages/web-app/auth-page/account-benefits-coins.png"
-                                        alt=""
-                                    />
-                                </div>
-                                <div className='available'>
-                                    <h3 className='title'>
-                                        Bạn có thể
-                                    </h3>
-                                    <ul>
-                                        <li>
-                                            <i className="bi bi-check2"></i> <span>Mở khóa giá thành viên và ưu đãi cho khách hàng thân thiết</span>
-                                        </li>
-                                        <li>
-                                            <i className="bi bi-check2"></i> <span>Dễ dàng xem lại nơi lưu trú đã lưu từ bất cứ thiết bị nào</span>
-                                        </li>
-                                        <li>
-                                            <i className="bi bi-check2"></i> <span>Tiết kiệm lớn nhờ thông báo giá trên app của chúng tôi</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col md={6}>
                             <div className='zotel-section'>
                                 <div className='logo'>
                                     <i className="bi bi-arrow-left-circle"
                                         onClick={() => navigate('/login')}
                                     ></i>
-                                    <img src={imgBackground}
-                                        alt="logo"
-                                        className='img-fluid zotel-logo'
-                                    />
                                 </div>
                                 <div className='register'>
                                     <h3 className='title'>
@@ -153,22 +144,38 @@ const RegisterPage = () => {
                                             onChange={handleChange}
                                             required
                                         />
-                                        <input 
-                                            type="text"
-                                            name="fullName"
-                                            className='form-control register-input'
-                                            placeholder='Họ và tên'
-                                            value={formData.fullName}
-                                            onChange={handleChange}
-                                            required
-                                        />
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <input 
+                                                    type="text"
+                                                    name="firstName"
+                                                    className='form-control register-input'
+                                                    placeholder='Họ'
+                                                    value={formData.firstName}
+                                                    onChange={handleChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="col-md-6">
+                                                <input 
+                                                    type="text"
+                                                    name="lastName"
+                                                    className='form-control register-input'
+                                                    placeholder='Tên'
+                                                    value={formData.lastName}
+                                                    onChange={handleChange}
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
                                         <input 
                                             type="tel"
                                             name="phone"
                                             className='form-control register-input'
-                                            placeholder='Số điện thoại (tùy chọn)'
+                                            placeholder='Số điện thoại (bắt buộc)'
                                             value={formData.phone}
                                             onChange={handleChange}
+                                            required={true}
                                         />
                                         <input 
                                             type="password"
@@ -216,22 +223,46 @@ const RegisterPage = () => {
                                                 <FaFacebook className="me-2 text-primary" /> Facebook
                                             </button>
                                         </div>
-
                                     </div>
+                                    
+                                    {/* Policy Text */}
+                                    <p className="text-muted mt-3 policy-section">
+                                        Bằng việc tạo tài khoản, bạn đồng ý với{" "}
+                                        <a href="#" className="text-primary text-decoration-none">
+                                            Chính sách riêng tư
+                                        </a>{" "}
+                                        và{" "}
+                                        <a href="#" className="text-primary text-decoration-none">
+                                            Điều khoản sử dụng
+                                        </a>{" "}
+                                        của chúng tôi.
+                                    </p>
                                 </div>
-                                
-                                {/* Policy Text */}
-                                <p className="text-muted mt-3 policy-section">
-                                    Bằng việc tạo tài khoản, bạn đồng ý với{" "}
-                                    <a href="#" className="text-primary text-decoration-none">
-                                        Chính sách riêng tư
-                                    </a>{" "}
-                                    và{" "}
-                                    <a href="#" className="text-primary text-decoration-none">
-                                        Điều khoản sử dụng
-                                    </a>{" "}
-                                    của chúng tôi.
-                                </p>
+                            </div>
+                        </Col>
+                        <Col md={6}>
+                            <div className='intro-section'>
+                                <div className='intro-section-img'>
+                                    <img src="https://imgcy.trivago.com/c_limit,d_dummy.jpeg,f_auto,q_auto:eco,h_233,dpr_2.0/hardcodedimages/web-app/auth-page/account-benefits-coins.png"
+                                        alt=""
+                                    />
+                                </div>
+                                <div className='available'>
+                                    <h3 className='title'>
+                                        Bạn có thể
+                                    </h3>
+                                    <ul>
+                                        <li>
+                                            <i className="bi bi-check2"></i> <span>Mở khóa giá thành viên và ưu đãi cho khách hàng thân thiết</span>
+                                        </li>
+                                        <li>
+                                            <i className="bi bi-check2"></i> <span>Dễ dàng xem lại nơi lưu trú đã lưu từ bất cứ thiết bị nào</span>
+                                        </li>
+                                        <li>
+                                            <i className="bi bi-check2"></i> <span>Tiết kiệm lớn nhờ thông báo giá trên app của chúng tôi</span>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </Col>
                     </Row>

@@ -17,6 +17,7 @@ const HotelManagement = () => {
   
   useEffect(() => {
     fetchHotels();
+    document.title = 'Hotel Management - Partner Dashboard'; // Set the document title
   }, [currentPage, pageSize]);
 
   const fetchHotels = async () => {
