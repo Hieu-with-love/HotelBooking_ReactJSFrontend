@@ -70,6 +70,7 @@ const CreateHotel = () => {
         setTimeout(() => {
             setLoading(false);
         }, 1000);
+        document.title = "Create New Hotel | Partner Management";
     }, []);
 
     const handleInputChange = (e) => {
