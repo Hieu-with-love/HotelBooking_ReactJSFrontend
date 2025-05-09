@@ -2,9 +2,20 @@ import {api} from './apiConfig'
 
 const API_DISCOUNT_URL = '/api/partner/vouchers'
 
+const getJwt = () => {
+    return localStorage.getItem('jwt')
+}
+
 export const getDiscounts = async (page, size) => {
     try{
-        const response = await api.get(`${API_DISCOUNT_URL}?page=${page}&size=${size}`);
+        const jwt = getJwt()
+        const response = await api.get(`${API_DISCOUNT_URL}?page=${page}&size=${size}`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${jwt}`
+                }
+            }
+        );
         return response.data
     } catch (error) {
         console.error('Error fetching discounts:', error)
@@ -14,7 +25,12 @@ export const getDiscounts = async (page, size) => {
 
 export const getDiscountById = async (discountId) => {
     try{
-        const response = await api.get(`${API_DISCOUNT_URL}/${discountId}`)
+        const jwt = getJwt();
+        const response = await api.get(`${API_DISCOUNT_URL}/${discountId}`, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        })
         return response.data
     } catch (error) {
         console.error('Error fetching discount by ID:', error)
@@ -24,7 +40,12 @@ export const getDiscountById = async (discountId) => {
 
 export const createDiscount = async (discountData) => {
     try{
-        const response = await api.post(`${API_DISCOUNT_URL}/create`, discountData)
+        const jwt = getJwt()
+        const response = await api.post(`${API_DISCOUNT_URL}/create`, discountData, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        })
         return response.data
     } catch (error) {
         console.error('Error creating discount:', error)
@@ -34,7 +55,12 @@ export const createDiscount = async (discountData) => {
 
 export const updateDiscount = async (discountId, discountData) => {
     try{
-        const response = await api.put(`${API_DISCOUNT_URL}/update/${discountId}`, discountData)
+        const jwt = getJwt()
+        const response = await api.put(`${API_DISCOUNT_URL}/update/${discountId}`, discountData, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        })
         return response.data
     } catch (error) {
         console.error('Error updating discount:', error)
@@ -44,7 +70,12 @@ export const updateDiscount = async (discountId, discountData) => {
 
 export const deleteDiscount = async (discountId) => {
     try{
-        const response = await api.delete(`${API_DISCOUNT_URL}/delete/${discountId}`)
+        const jwt = getJwt()
+        const response = await api.delete(`${API_DISCOUNT_URL}/delete/${discountId}`, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`
+            }
+        })
         return response.data
     } catch (error) {
         console.error('Error deleting discount:', error)
