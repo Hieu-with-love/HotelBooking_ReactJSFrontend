@@ -11,7 +11,7 @@ const AuthApi = {
       }
       return response.data;
     } catch (error) {
-      return Promise.reject(error.response ? error.response.data : error.message);
+      return error.response;
     }
   },
   

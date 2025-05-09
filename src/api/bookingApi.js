@@ -1,11 +1,16 @@
 import axios from 'axios';
 import { api, API_BASE_URL } from './apiConfig';
 
-const jwt = localStorage.getItem('jwt');
 const API_BOOKING_URL = '/api/customer/bookings';
+
+const getJwt = () => {
+    return localStorage.getItem('jwt');
+}
+
 
 export const createBooking = async (bookingData) => {
     try {
+        const jwt = getJwt();
         const response = await api.post(`${API_BOOKING_URL}/create`, bookingData, {
             headers: {
                 'Authorization': `Bearer ${jwt}`,
@@ -21,6 +26,7 @@ export const createBooking = async (bookingData) => {
 
 export const getBookingById = async (bookingId) => {
     try {
+        const jwt = getJwt();
         const response = await axios.get(`${API_BOOKING_URL}/${bookingId}`, {
             headers: {
                 'Authorization': `Bearer ${jwt}`
@@ -35,6 +41,7 @@ export const getBookingById = async (bookingId) => {
 
 export const getUserBookings = async () => {
     try {
+        const jwt = getJwt();
         const response = await axios.get(`${API_BOOKING_URL}/user`, {
             headers: {
                 'Authorization': `Bearer ${jwt}`

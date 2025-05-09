@@ -47,19 +47,16 @@ const LoginPage = () => {
             setError('');
             setLoading(true);
             
-            // Call login - it already fetches user data internally
             await login(loginForm.email, loginForm.password);
             
-            // The useEffect will handle redirection once currentUser is updated
-            
         } catch (err) {
-            console.error('Login error:', err);
-            
-            // No need to redirect to 404 page on login error
-            // 403 errors should only trigger 404 redirects when accessing protected routes
-            // not during the login process itself
-            
-            setError('Email hoặc mật khẩu không chính xác');
+            if (err.response && err.response.status === 401) {
+                setError("Tài khoản hoặc mật khẩu không đúng. Vui lòng thử lại.");
+            } else if (err.response && err.response.status === 400) {
+                setError("Vui lòng xác thực tài khoản của bạn trước khi đăng nhập.");
+            } else {
+                setError("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+            }
         } finally {
             setLoading(false);
         }

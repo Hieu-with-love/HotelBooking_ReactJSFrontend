@@ -5,26 +5,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays, faMapMarkerAlt, faUser, faCheck, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../../components/navbar/Navbar';
 import Footer from '../../components/footer/Footer';
-import { API_URL } from '../../api/apiConfig';
-import axios from 'axios';
 import './bookingDetails.css';
 import { createBooking } from '../../api/bookingApi';
 import default_room_img from '../../assets/images/default_room.jpg'
-import default_hotel_img from '../../assets/images/default_hotel_img.jpeg'  
-import { de } from 'date-fns/locale';
+import default_hotel_img from '../../assets/images/default_hotel_img.jpeg'
 
 const BookingDetails = () => {
-
     const location = useLocation();
     const navigate = useNavigate();
     const { selectedRooms, hotel } = location.state || { selectedRooms: [], hotel: {} };
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(''); // 'counter' or 'vnpay'
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         document.title = "Xác nhận đặt phòng";
     }, [])
+
+    // Calculate the base price (price per night for all rooms)
+    const calculateBasePrice = () => {
+        return selectedRooms.reduce((total, room) => total + room.price, 0);
+    };
 
     // Check if we have valid check-in/check-out dates from previous page
     const [checkInDate, setCheckInDate] = useState(
@@ -33,9 +33,52 @@ const BookingDetails = () => {
     const [checkOutDate, setCheckOutDate] = useState(
         location.state?.checkOutDate || new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]
     );
+    // Store base price (per night) separately
+    const [basePrice] = useState(calculateBasePrice());
+    const [totalPrice, setTotalPrice] = useState(calculateBasePrice());
 
-    // Calculate total price
-    const totalPrice = selectedRooms.reduce((total, room) => total + room.price, 0);
+    // Calculate nights of stay
+    const calculateNights = () => {
+        const start = new Date(checkInDate);
+        const end = new Date(checkOutDate);
+        const diffTime = Math.abs(end - start);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays || 1; // Ensure at least 1 night
+    };
+
+    // Update total price based on nights
+    const updateTotalPrice = () => {
+        const nights = calculateNights();
+        setTotalPrice(basePrice * nights);
+    };    // Effect to update price when dates change
+    useEffect(() => {
+        updateTotalPrice();
+    }, [checkInDate, checkOutDate, basePrice]);
+
+    const handleChangeCheckInDate = (e) => {
+        const newCheckInDate = e.target.value;
+
+        if (new Date() > new Date(newCheckInDate)) {
+            alert("Ngày nhận phòng không được trước ngày hiện tại");
+            return;
+        }else if (new Date(newCheckInDate) >= new Date(checkOutDate)) {
+            alert("Ngày nhận phòng không được lớn hơn hoặc bằng ngày trả phòng");
+            return;
+        }
+
+        setCheckInDate(newCheckInDate);
+    }
+
+    const handleChangeCheckOutDate = (e) => {
+        const newCheckOutDate = e.target.value;
+
+        if (new Date(newCheckOutDate) <= new Date(checkInDate)) {
+            alert("Ngày trả phòng không được nhỏ hơn hoặc bằng ngày nhận phòng");
+            return;
+        }
+
+        setCheckOutDate(newCheckOutDate);
+    }
 
     // Get image URL for a room
     const getImageUrl = (room) => {
@@ -45,20 +88,13 @@ const BookingDetails = () => {
             } else {
                 return default_room_img;
             }
-        }else {
+        } else {
             return room.images[0].url;
         }
-        
     };
 
-    // Handle book with payment method
-    const handleBookWithPayment = async () => {
-        console.log("Selected Payment Method:", selectedPaymentMethod);
-        if (!selectedPaymentMethod) {
-            setError("Please select a payment method");
-            return;
-        }
-
+    // Handle booking confirmation
+    const handleBookConfirmation = async () => {
         try {
             setLoading(true);
             setError(null);
@@ -69,17 +105,17 @@ const BookingDetails = () => {
                 return;
             }
 
-            // Prepare booking data
+            // Prepare booking data with counter payment
             const bookingData = {
                 hotelId: hotel.id,
                 checkInDate: checkInDate,
                 checkOutDate: checkOutDate,
                 price: totalPrice,
                 paymentMethod: {
-                    id: selectedPaymentMethod === 'counter' ? 1 : 2, // Assuming 1 is for counter and 2 is for VNPay
-                    type: selectedPaymentMethod === 'counter' ? 'CASH' : 'ONLINE',
+                    id: 1, // Counter payment
+                    type: 'CASH',
                 },
-                status: selectedPaymentMethod === 'counter' ? 'PENDING' : 'PROCESSING',
+                status: 'PENDING',
                 rooms:
                     selectedRooms.map((room) => ({
                         id: room.id,
@@ -99,40 +135,27 @@ const BookingDetails = () => {
             // Send booking request to the backend
             const response = await createBooking(bookingJsonData);
 
-            console.log("Booking Response:", response);
-
-            // Handle VNPay redirect if needed
-            if (selectedPaymentMethod === 'vnpay' && response.data.paymentUrl) {
-                // Store booking information in session storage before redirecting to VNPay
-                sessionStorage.setItem('pendingBookingData', JSON.stringify({
-                    bookingId: response.data.id,
-                    paymentMethod: selectedPaymentMethod,
-                    totalAmount: response.data.totalPrice,
+            if ((response.status === 400 || response.status === 401) && response.data.message.includes("User")) {
+                console.log("Chưa đăng nhập khi booking")
+                alert("Bạn cần đăng nhập để thực hiện đặt phòng");
+                navigate('/login', { state: { redirectTo: location.pathname, state: location.state } });
+            } else {
+                const bookingConfirmation = {
+                    bookingId: response.bookingId,
+                    paymentMethod: 'counter',
+                    totalAmount: response.totalPrice,
                     hotel: hotel,
-                    selectedRooms: response.data.selectedRooms,
-                    checkInDate: response.data.checkInDate,
-                    checkOutDate: response.data.checkOutDate
-                }));
-                // Redirect to VNPay payment page
-                window.location.href = response.data.paymentUrl;
-                return;
-            }
+                    selectedRooms: response.selectedRooms,
+                    checkInDate: response.checkInDate,
+                    checkOutDate: response.checkOutDate,
+                    user: response.user
+                }
 
-            const bookingConfimation = {
-                bookingId: response.bookingId,
-                paymentMethod: selectedPaymentMethod,
-                totalAmount: response.totalPrice,
-                hotel: hotel,
-                selectedRooms: response.selectedRooms,
-                checkInDate: response.checkInDate,
-                checkOutDate: response.checkOutDate,
-                user: response.user
+                // Navigate to booking confirmation page
+                navigate('/booking-confirmation', {
+                    state: { bookingConfirmation, hotel: hotel, selectedRooms: selectedRooms }
+                });
             }
-
-            // Navigate to booking confirmation page
-            navigate('/booking-confirmation', {
-                state: {bookingConfimation, hotel: hotel, selectedRooms: selectedRooms}
-            });
 
         } catch (err) {
             console.error("Error creating booking:", err);
@@ -140,15 +163,6 @@ const BookingDetails = () => {
         } finally {
             setLoading(false);
         }
-    };
-
-    // Calculate nights of stay
-    const calculateNights = () => {
-        const start = new Date(checkInDate);
-        const end = new Date(checkOutDate);
-        const diffTime = Math.abs(end - start);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return diffDays || 1; // Ensure at least 1 night
     };
 
     return (
@@ -198,13 +212,13 @@ const BookingDetails = () => {
                                             <Col md={6} className="mb-3">
                                                 <Form.Group>
                                                     <Form.Label>
-                                                        <FontAwesomeIcon icon={faCalendarDays} className="me-2 text-primary" /> 
+                                                        <FontAwesomeIcon icon={faCalendarDays} className="me-2 text-primary" />
                                                         Ngày nhận phòng
                                                     </Form.Label>
                                                     <Form.Control
                                                         type="date"
                                                         value={checkInDate}
-                                                        onChange={(e) => setCheckInDate(e.target.value)}
+                                                        onChange={handleChangeCheckInDate}
                                                         min={new Date().toISOString().split('T')[0]}
                                                     />
                                                 </Form.Group>
@@ -212,13 +226,13 @@ const BookingDetails = () => {
                                             <Col md={6} className="mb-3">
                                                 <Form.Group>
                                                     <Form.Label>
-                                                        <FontAwesomeIcon icon={faCalendarDays} className="me-2 text-primary" /> 
+                                                        <FontAwesomeIcon icon={faCalendarDays} className="me-2 text-primary" />
                                                         Ngày trả phòng
                                                     </Form.Label>
                                                     <Form.Control
                                                         type="date"
                                                         value={checkOutDate}
-                                                        onChange={(e) => setCheckOutDate(e.target.value)}
+                                                        onChange={handleChangeCheckOutDate}
                                                         min={checkInDate}
                                                     />
                                                 </Form.Group>
@@ -288,53 +302,17 @@ const BookingDetails = () => {
                                         )}
                                     </div>
 
-                                    {/* Payment Methods */}
-                                    <div className="payment-methods mb-4">
+                                    {/* Payment Information */}
+                                    <div className="payment-info mb-4">
                                         <h5>Phương thức thanh toán</h5>
-                                        <div className="payment-options mt-3">
-                                            <div 
-                                                className={`payment-option mb-3 ${selectedPaymentMethod === 'counter' ? 'selected' : ''}`}
-                                                onClick={() => setSelectedPaymentMethod('counter')}
-                                            >
-                                                <div className="payment-radio">
-                                                    <input
-                                                        type="radio"
-                                                        name="payment-method"
-                                                        id="counter-payment"
-                                                        checked={selectedPaymentMethod === 'counter'}
-                                                        onChange={() => setSelectedPaymentMethod('counter')}
-                                                    />
-                                                    <label htmlFor="counter-payment"></label>
+                                        <div className="payment-option-info mt-3">
+                                            <div className="d-flex align-items-center">
+                                                <div className="payment-logo me-3">
+                                                    <FontAwesomeIcon icon={faMoneyBill} size="lg" />
                                                 </div>
                                                 <div className="payment-content">
                                                     <h6 className="mb-1">Thanh toán tại quầy</h6>
                                                     <p className="text-muted mb-0">Thanh toán khi bạn đến khách sạn</p>
-                                                </div>
-                                                <div className="payment-logo">
-                                                    <FontAwesomeIcon icon={faMoneyBill} size="lg" />
-                                                </div>
-                                            </div>
-
-                                            <div 
-                                                className={`payment-option ${selectedPaymentMethod === 'vnpay' ? 'selected' : ''}`}
-                                                onClick={() => setSelectedPaymentMethod('vnpay')}
-                                            >
-                                                <div className="payment-radio">
-                                                    <input
-                                                        type="radio"
-                                                        name="payment-method"
-                                                        id="vnpay-payment"
-                                                        checked={selectedPaymentMethod === 'vnpay'}
-                                                        onChange={() => setSelectedPaymentMethod('vnpay')}
-                                                    />
-                                                    <label htmlFor="vnpay-payment"></label>
-                                                </div>
-                                                <div className="payment-content">
-                                                    <h6 className="mb-1">VNPay</h6>
-                                                    <p className="text-muted mb-0">Thanh toán trực tuyến qua VNPay</p>
-                                                </div>
-                                                <div className="payment-logo">
-                                                    <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Icon-VNPAY-QR.png" alt="VNPay" style={{ height: '30px' }} />
                                                 </div>
                                             </div>
                                         </div>
@@ -377,8 +355,8 @@ const BookingDetails = () => {
                                     <Button
                                         variant="primary"
                                         className="w-100 mt-3 booking-button"
-                                        onClick={handleBookWithPayment}
-                                        disabled={loading || selectedRooms.length === 0 || !selectedPaymentMethod}
+                                        onClick={handleBookConfirmation}
+                                        disabled={loading || selectedRooms.length === 0}
                                     >
                                         {loading ? (
                                             <>
@@ -406,7 +384,7 @@ const BookingDetails = () => {
                                         <li>Giờ nhận phòng thường từ 14:00</li>
                                         <li>Giờ trả phòng thường trước 12:00</li>
                                         <li>Vui lòng mang theo giấy tờ tùy thân khi nhận phòng</li>
-                                        <li>Nếu thanh toán tại quầy, phòng chỉ được giữ đến 18:00 ngày nhận phòng</li>
+                                        <li>Phòng chỉ được giữ đến 18:00 ngày nhận phòng</li>
                                     </ul>
                                 </Card.Body>
                             </Card>

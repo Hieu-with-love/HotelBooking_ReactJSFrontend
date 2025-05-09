@@ -30,10 +30,11 @@ const RegisterPage = () => {
     
     // Redirect to verification page
     useEffect(() => {
+        document.title = "Đăng ký";
+        
         if (isVerifying) {
             navigate('/verify-email', { state: { email: formData.email } });
         }
-        document.title = "Đăng ký";
     }, [isVerifying, navigate, formData.email]);
 
     // Validate email format
@@ -93,11 +94,11 @@ const RegisterPage = () => {
             // Create user object for registration
             const userData = {
                 email: formData.email,
+                phone: formData.phone || null,
                 password: formData.password,
                 confirmPassword: formData.confirmPassword,
                 firstName: formData.firstName,
                 lastName: formData.lastName,
-                phone: formData.phone || null,
                 role: formData.role || null
             };
             

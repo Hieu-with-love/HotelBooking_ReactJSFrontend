@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [isVerifying, setIsVerifying] = useState(false);
 
+
   // Function to fetch current user data
   const fetchCurrentUser = async () => {
     try {
@@ -52,7 +53,18 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     try {
       const data = await AuthApi.login({ email, password });
-      await fetchCurrentUser(); // Fetch user data after successful login
+      if ((data.status === 401 || data.status === 400)) {
+        if (data.data.message.includes("verified")){
+          alert("Vui lòng xác thực tài khoản của bạn trước khi đăng nhập.");
+        }else {
+          alert("Tài khoản hoặc mật khẩu không đúng. Vui lòng thử lại.");
+        }
+        
+      } else {
+        await fetchCurrentUser(); // Fetch user data after successful login
+      }
+
+      console.log("Login data:", data);
       return data;
     } catch (err) {
       setError(err.message || 'Failed to login');
