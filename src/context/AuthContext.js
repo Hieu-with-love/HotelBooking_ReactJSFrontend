@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Register function
-  const register = async (userData) => {
+  const register = async (userData, role = "customer") => {
     setLoading(true);
     setError(null);
     try {

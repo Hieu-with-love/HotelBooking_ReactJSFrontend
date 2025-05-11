@@ -245,9 +245,9 @@ const BookingConfirmation = () => {
                                                     <h5>Thông tin khách hàng</h5>
                                                     <Card className="bg-light">
                                                         <Card.Body>
-                                                            <p className="mb-1"><strong>Họ tên:</strong> {bookingConfirmation.user.fullName || bookingConfirmation.user.name}</p>
+                                                            <p className="mb-1"><strong>Họ tên:</strong> {bookingConfirmation.user.firstName} {bookingConfirmation.user.lastName}</p>
                                                             <p className="mb-1"><strong>Email:</strong> {bookingConfirmation.user.email}</p>
-                                                            <p className="mb-0"><strong>Số điện thoại:</strong> {bookingConfirmation.user.phone || "Chưa cung cấp"}</p>
+                                                            <p className="mb-0"><strong>Số điện thoại:</strong> {bookingConfirmation.user.phoneNumber || "Chưa cung cấp"}</p>
                                                         </Card.Body>
                                                     </Card>
                                                 </div>

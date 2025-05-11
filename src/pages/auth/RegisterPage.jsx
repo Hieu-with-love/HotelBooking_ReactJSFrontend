@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Col, Container, Row, Alert } from 'react-bootstrap'
 import { FaGoogle, FaApple, FaFacebook } from "react-icons/fa";
 import './register.css'
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const RegisterPage = () => {
@@ -17,7 +17,9 @@ const RegisterPage = () => {
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [roleUser, setRoleUser] = useState('');
     
+    const location = useLocation();
     const navigate = useNavigate();
     const { register, currentUser, isVerifying } = useAuth();
     
@@ -27,15 +29,24 @@ const RegisterPage = () => {
             navigate('/');
         }
     }, [currentUser, navigate]);
-    
-    // Redirect to verification page
+      // Redirect to verification page and check for partner role
     useEffect(() => {
-        document.title = "Đăng ký";
+        // Check if we're coming from the partner button
+        if (location.state && location.state.role === 'partner') {
+            setFormData(prev => ({
+                ...prev,
+                role: 'PARTNER'
+            }));
+            document.title = "Đăng ký đối tác";
+            setRoleUser('partner');
+        } else {
+            document.title = "Đăng ký";
+        }
         
         if (isVerifying) {
             navigate('/verify-email', { state: { email: formData.email } });
         }
-    }, [isVerifying, navigate, formData.email]);
+    }, [isVerifying, navigate, formData.email, location.state]);
 
     // Validate email format
     const isValidEmail = (email) => {
@@ -56,6 +67,7 @@ const RegisterPage = () => {
             ...prev,
             [name]: value
         }));
+
     };
 
     const handleSubmit = async (e) => {
@@ -124,17 +136,20 @@ const RegisterPage = () => {
                                     <i className="bi bi-arrow-left-circle"
                                         onClick={() => navigate('/login')}
                                     ></i>
-                                </div>
-                                <div className='register'>
+                                </div>                                <div className='register'>
                                     <h3 className='title'>
-                                        Đăng ký nhanh chóng bằng email có sẵn của bạn
+                                        {roleUser === 'partner' 
+                                            ? "Đăng ký tài khoản đối tác" 
+                                            : "Đăng ký nhanh chóng bằng email có sẵn của bạn"}
                                     </h3>
                                     
                                     {error && <Alert variant="danger">{error}</Alert>}
                                     
                                     <form onSubmit={handleSubmit}>
                                         <span className='login-title'>
-                                            Đăng ký nhanh bằng cách nhập thông tin cá nhân
+                                            {roleUser === 'partner' 
+                                                ? "Đăng ký để quản lý khách sạn của bạn" 
+                                                : "Đăng ký nhanh bằng cách nhập thông tin cá nhân"}
                                         </span>
                                         <input 
                                             type="email"
@@ -195,13 +210,12 @@ const RegisterPage = () => {
                                             value={formData.confirmPassword}
                                             onChange={handleChange}
                                             required
-                                        />
-                                        <button 
+                                        />                                            <button 
                                             type="submit"
                                             className='btn btn-primary register-btn'
                                             disabled={loading}
                                         >
-                                            {loading ? 'Đang xử lý...' : 'Tiếp tục'}
+                                            {loading ? 'Đang xử lý...' : roleUser === 'partner' ? 'Đăng ký đối tác' : 'Tiếp tục'}
                                         </button>
                                     </form>
 
@@ -247,22 +261,38 @@ const RegisterPage = () => {
                                     <img src="https://imgcy.trivago.com/c_limit,d_dummy.jpeg,f_auto,q_auto:eco,h_233,dpr_2.0/hardcodedimages/web-app/auth-page/account-benefits-coins.png"
                                         alt=""
                                     />
-                                </div>
-                                <div className='available'>
+                                </div>                                <div className='available'>
                                     <h3 className='title'>
-                                        Bạn có thể
+                                        {roleUser === 'partner' ? 'Lợi ích của đối tác' : 'Bạn có thể'}
                                     </h3>
-                                    <ul>
-                                        <li>
-                                            <i className="bi bi-check2"></i> <span>Mở khóa giá thành viên và ưu đãi cho khách hàng thân thiết</span>
-                                        </li>
-                                        <li>
-                                            <i className="bi bi-check2"></i> <span>Dễ dàng xem lại nơi lưu trú đã lưu từ bất cứ thiết bị nào</span>
-                                        </li>
-                                        <li>
-                                            <i className="bi bi-check2"></i> <span>Tiết kiệm lớn nhờ thông báo giá trên app của chúng tôi</span>
-                                        </li>
-                                    </ul>
+                                    {roleUser === 'partner' ? (
+                                        <ul>
+                                            <li>
+                                                <i className="bi bi-check2"></i> <span>Tiếp cận hàng nghìn khách hàng tiềm năng</span>
+                                            </li>
+                                            <li>
+                                                <i className="bi bi-check2"></i> <span>Quản lý đặt phòng và khách sạn dễ dàng</span>
+                                            </li>
+                                            <li>
+                                                <i className="bi bi-check2"></i> <span>Tăng hiệu suất kinh doanh với công cụ phân tích</span>
+                                            </li>
+                                            <li>
+                                                <i className="bi bi-check2"></i> <span>Không mất phí đăng ký, chỉ tính hoa hồng khi có đặt phòng</span>
+                                            </li>
+                                        </ul>
+                                    ) : (
+                                        <ul>
+                                            <li>
+                                                <i className="bi bi-check2"></i> <span>Mở khóa giá thành viên và ưu đãi cho khách hàng thân thiết</span>
+                                            </li>
+                                            <li>
+                                                <i className="bi bi-check2"></i> <span>Dễ dàng xem lại nơi lưu trú đã lưu từ bất cứ thiết bị nào</span>
+                                            </li>
+                                            <li>
+                                                <i className="bi bi-check2"></i> <span>Tiết kiệm lớn nhờ thông báo giá trên app của chúng tôi</span>
+                                            </li>
+                                        </ul>
+                                    )}
                                 </div>
                             </div>
                         </Col>

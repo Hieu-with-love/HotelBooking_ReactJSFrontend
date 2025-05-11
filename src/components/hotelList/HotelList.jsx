@@ -49,7 +49,6 @@ const HotelList = () => {
             // Get hotels data
             setHotels(response.content);
             setError(null);
-            console.log(response);
         } catch (err) {
             console.error('Error fetching hotel data:', err);
             setError('Failed to fetch hotel data. Please try again later.');
