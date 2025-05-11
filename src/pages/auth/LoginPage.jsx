@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Col, Container, Row, Alert } from 'react-bootstrap'
 import { FaGoogle, FaApple, FaFacebook } from "react-icons/fa";
 import './login.css'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import imgBackground from '../../assets/images/zotel-background.png'
 import { useAuth } from '../../context/AuthContext';
 
@@ -13,27 +13,31 @@ const LoginPage = () => {
     })
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [userRole, setUserRole] = useState('customer'); // Default role is user
     
     const navigate = useNavigate();
+    const location = useLocation();
     const { login, currentUser, redirectBasedOnRole } = useAuth();
-    
-    // Redirect if user is already logged in
+      // Redirect if user is already logged in
     useEffect(() => {
         if (currentUser) {
             redirectBasedOnRole(navigate);
         }
 
-        document.title = "Đăng nhập";
-    }, [currentUser, navigate, redirectBasedOnRole]);
+        // Check if we have a role parameter in the location state
+        if (location.state && location.state.role) {
+            setUserRole(location.state.role);
+        }
 
-    const hanldChangeLoginForm = (e) => {
+        document.title = userRole === "partner" ? "Đăng nhập đối tác" : "Đăng nhập";
+    }, [currentUser, navigate, redirectBasedOnRole, location.state, userRole]);    const hanldChangeLoginForm = (e) => {
         const {name, value} = e.target;
         setLoginForm({
             ...loginForm,
             [name]: value
         })
     }
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -47,7 +51,8 @@ const LoginPage = () => {
             setError('');
             setLoading(true);
             
-            await login(loginForm.email, loginForm.password);
+            // Pass the role to the login function
+            await login(loginForm.email, loginForm.password, userRole);
             
         } catch (err) {
             if (err.response && err.response.status === 401) {
@@ -105,17 +110,20 @@ const LoginPage = () => {
                                     >
                                         Đăng ký
                                     </button>
-                                </div>
-                                <div className='login'>
+                                </div>                                <div className='login'>
                                     <h3 className='title'>
-                                        Tiết kiệm nhiều hơn khi là thành viên
+                                        {userRole === "partner" 
+                                            ? "Đăng nhập đối tác" 
+                                            : "Tiết kiệm nhiều hơn khi là thành viên"}
                                     </h3>
                                     
                                     {error && <Alert variant="danger">{error}</Alert>}
                                     
                                     <form onSubmit={handleSubmit}>
                                         <span className='login-title'>
-                                            Đăng nhập bằng email và mật khẩu đã tạo
+                                            {userRole === "partner" 
+                                                ? "Đăng nhập vào tài khoản đối tác của bạn" 
+                                                : "Đăng nhập bằng email và mật khẩu đã tạo"}
                                         </span>
                                         <input 
                                             type="email"

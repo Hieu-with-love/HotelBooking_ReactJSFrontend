@@ -10,3 +10,46 @@
     width: 1024px;
     font-size: 24px;
 }
+
+.partner-section {
+  margin: 20px 0;
+  padding: 40px 20px;
+  background: linear-gradient(to right, #0071c2, #2a8dd4);
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+}
+
+.partner-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.partner-content h2 {
+  font-size: 28px;
+  margin-bottom: 15px;
+}
+
+.partner-content p {
+  font-size: 16px;
+  margin-bottom: 25px;
+  opacity: 0.9;
+}
+
+.partner-button {
+  background-color: #fff;
+  color: #0071c2;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.partner-button:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

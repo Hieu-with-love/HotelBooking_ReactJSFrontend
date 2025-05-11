@@ -110,7 +110,7 @@ const BookingDetails = () => {
                 hotelId: hotel.id,
                 checkInDate: checkInDate,
                 checkOutDate: checkOutDate,
-                price: totalPrice,
+                totalPrice: totalPrice,
                 paymentMethod: {
                     id: 1, // Counter payment
                     type: 'CASH',
@@ -143,7 +143,7 @@ const BookingDetails = () => {
                 const bookingConfirmation = {
                     bookingId: response.bookingId,
                     paymentMethod: 'counter',
-                    totalAmount: response.totalPrice,
+                    totalAmount: totalPrice,
                     hotel: hotel,
                     selectedRooms: response.selectedRooms,
                     checkInDate: response.checkInDate,
